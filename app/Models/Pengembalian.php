@@ -22,6 +22,17 @@ class Pengembalian extends Model
 
     public function denda()
     {
-        return $this->hasMany(Denda::class);
+        return $this->hasOne(Denda::class);
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($pengembalian) {
+            $pengembalian->peminjaman->update([
+                'status' => 'dikembalikan'
+            ]);
+        });
     }
 }
+
+

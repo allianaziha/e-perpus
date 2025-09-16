@@ -39,16 +39,21 @@
                     <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" aria-expanded="false">
                       <div class="d-flex align-items-center">
                         <div class="user-profile-img">
-                          <img src="{{ asset('/assets/backend/images/profile/user-1.jpg') }}"
-                              class="rounded-circle" width="35" height="35" alt="user-img" />
+                          <div class="user-profile-img d-flex align-items-center justify-content-center rounded-circle bg-primary text-white" 
+                              style="width:35px; height:35px; font-weight:bold;">
+                              {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                          </div>
                         </div>
                       </div>
                     </a>
                     <div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop1">
                       <div class="profile-dropdown position-relative" data-simplebar>
                         <div class="d-flex align-items-center py-4 px-4 border-bottom">
-                          <img src="{{ asset('/assets/backend/images/profile/user-1.jpg') }}"
-                              class="rounded-circle" width="60" height="60" alt="user-img" />
+                          <div class="user-profile-img d-flex align-items-center justify-content-center rounded-circle bg-primary text-white" 
+                                style="width:35px; height:35px; font-weight:bold;">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                          </div>
+
                           <div class="ms-3">
                             <h5 class="mb-1 fs-5">
                               {{ auth()->user()->name ?? '' }}
@@ -58,8 +63,6 @@
                             </p>
                           </div>
                         </div>
-
-                        <!-- Hapus bagian My Profile -->
 
                         <div class="d-grid py-3 px-4">
                           <form method="POST" action="{{ route('logout') }}">

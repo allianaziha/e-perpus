@@ -1,80 +1,67 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-bs-theme="light" data-color-theme="Blue_Theme" data-layout="vertical">
-
+<html lang="en">
 <head>
-  <!-- Required meta tags -->
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Favicon icon-->
-  <link rel="shortcut icon" type="image/png" href="{{asset('/assets/backend/images/logos/favicon.png')}}" />
-
-  <!-- Core Css -->
-  <link rel="stylesheet" href="{{asset('/assets/backend/css/styles.css')}}" />
-
-  <title>Halaman Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Perpustakaan</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="h-screen">
 
-<body>
-  <!-- Preloader -->
-  <div class="preloader">
-    <img src="{{asset('/assets/backend/images/logos/favicon.png')}}" alt="loader" class="lds-ripple img-fluid" />
-  </div>
-  <div id="main-wrapper" class="auth-customizer-none">
-    <div class="position-relative overflow-hidden radial-gradient min-vh-100 w-100 d-flex align-items-center justify-content-center">
-      <div class="d-flex align-items-center justify-content-center w-100">
-        <div class="row justify-content-center w-100">
-          <div class="col-md-8 col-lg-6 col-xxl-3 auth-card">
-            <div class="card mb-0">
-              <div class="card-body">
-                <a class="text-nowrap text-center d-block mb-3 w-100" style="font-size: 40px; font-weight: 500; color: #000;">LOGIN </a>
-                <form method="POST" action="{{ route('login') }}">
-                  @csrf
-                  <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                  </div>
-                  <div class="mb-4">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-                  </div>
-                  <div class="d-flex align-items-center justify-content-between mb-4">
-                    <div class="form-check">
-                      <input class="form-check-input primary" type="checkbox" value="" id="flexCheckChecked" checked>
-                      <label class="form-check-label text-dark" for="flexCheckChecked">
-                        Remeber this Device
-                      </label>
-                    </div>
-                    <a class="text-primary fw-medium" href="{{ route('password.request') }}">Forgot
-                      Password ?</a>
-                  </div>
-                  <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign In</button>  
-                  <div class="d-flex align-items-center justify-content-center">
-                    <a class="text-primary fw-medium ms-2" href="{{ route('register') }}">Create an account</a>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- Background perpustakaan -->
+    <div class="fixed inset-0 bg-cover bg-center" 
+        style="background-image: url('{{ asset('assets/images/bg-perpus.jpg') }}'); filter: brightness(0.5);">
     </div>
-    <script>
-  function handleColorTheme(e) {
-    document.documentElement.setAttribute("data-color-theme", e);
-  }
-</script>
-  <div class="dark-transparent sidebartoggler"></div>
-  <!-- Import Js Files -->
-  <script src="{{asset('/assets/backend/libs/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
-  <script src="{{asset('/assets/backend/libs/simplebar/dist/simplebar.min.js')}}"></script>
-  <script src="{{asset('/assets/backend/js/theme/app.init.js')}}"></script>
-  <script src="{{asset('/assets/backend/js/theme/theme.js')}}"></script>
-  <script src="{{asset('/assets/backend/js/theme/app.min.js')}}"></script>
 
-  <!-- solar icons -->
-  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+    <!-- Form container -->
+    <div class="flex items-center justify-center h-screen relative z-10">
+        <div class="bg-white bg-opacity-85 rounded-xl shadow-lg p-8 w-full max-w-md">
+           <!-- Ganti teks jadi logo -->
+            <div class="text-center">
+                <img src="{{ asset('assets/images/logo-perpus.png') }}" alt="Logo Perpustakaan" class="mx-auto w-30 h-20 mb-4">
+            </div>
+
+            <!-- Error message -->
+            @if ($errors->any())
+                <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+                    <ul class="list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="mb-4">
+                    <label class="block mb-1 font-medium text-gray-700" for="email">Email</label>
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block mb-1 font-medium text-gray-700" for="password">Password</label>
+                    <input id="password" type="password" name="password" required
+                        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="flex items-center justify-between mb-4">
+                    <label class="inline-flex items-center text-gray-700">
+                        <input type="checkbox" name="remember" class="form-checkbox">
+                        <span class="ml-2 text-sm">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">
+                    Login
+                </button>
+            </form>
+        </div>
+    </div>
+
 </body>
-
 </html>

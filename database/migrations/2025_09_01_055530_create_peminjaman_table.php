@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('buku_id')->constrained('bukus')->onDelete('cascade');
+            $table->integer('jumlah_buku');
             $table->date('tgl_pinjam');
             $table->date('tgl_jatuh_tempo');
             $table->enum('status', ['dipinjam', 'dikembalikan'])->default('dipinjam');

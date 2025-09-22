@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    Detail Rak
+                <div class="card-header bg-white">
+                    <h5>Detail Rak</h5>
                 </div>
                 <div class="card-body">
                     <p><strong>ID:</strong> {{ $rak->id }}</p>

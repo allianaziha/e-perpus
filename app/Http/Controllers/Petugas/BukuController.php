@@ -38,6 +38,7 @@ class BukuController extends Controller
             'penerbit'     => 'required|string|max:255',
             'tahun_terbit' => 'required|digits:4',
             'stok'         => 'required|integer',
+            'deskripsi'    => 'nullable|string',
             'gambar'       => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'rak_id'       => 'required|exists:raks,id',
             'kategori_id'  => 'required|exists:kategoris,id',
@@ -50,6 +51,7 @@ class BukuController extends Controller
         $buku->penerbit     = $request->penerbit;
         $buku->tahun_terbit = $request->tahun_terbit;
         $buku->stok         = $request->stok;
+        $buku->deskripsi    = $request->deskripsi;
         $buku->rak_id       = $request->rak_id;
         $buku->kategori_id  = $request->kategori_id;
 
@@ -87,6 +89,7 @@ class BukuController extends Controller
             'penerbit'     => 'required|string|max:255',
             'tahun_terbit' => 'required|digits:4',
             'stok'         => 'required|integer',
+            'deskripsi'   => 'nullable|string',
             'gambar'       => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'rak_id'       => 'required|exists:raks,id',
             'kategori_id'  => 'required|exists:kategoris,id',
@@ -99,6 +102,7 @@ class BukuController extends Controller
             'penerbit'     => $request->penerbit,
             'tahun_terbit' => $request->tahun_terbit,
             'stok'         => $request->stok,
+            'deskripsi'    => $request->deskripsi,
             'rak_id'       => $request->rak_id,
             'kategori_id'  => $request->kategori_id,
         ]);

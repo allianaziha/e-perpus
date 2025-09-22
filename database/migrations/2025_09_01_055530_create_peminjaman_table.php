@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->integer('jumlah_buku');
             $table->date('tgl_pinjam');
             $table->date('tgl_jatuh_tempo');
-            $table->enum('status', ['dipinjam', 'dikembalikan'])->default('dipinjam');
+            $table->enum('status', ['pending', 'dipinjam', 'dikembalikan', 'ditolak'])->default('pending');
             $table->timestamps();
         });
     }

@@ -8,24 +8,34 @@
     #dataPengembalian th, #dataPengembalian td {
         vertical-align: middle;
     }
+    .card {
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+    }
 </style>
 @endsection
 
 @section('content')
 <div class="container-fluid">
+    {{-- Judul Besar --}}
+    <h3 class="mb-3 fw-bold text-uppercase">PENGEMBALIAN</h3>
+
     <div class="row">
         <div class="col">
-            <div class="card">
-                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Daftar Pengembalian</h5>
+            <div class="card shadow">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Data Pengembalian</h5>
                     <a href="{{ route('petugas.pengembalian.create') }}" class="btn btn-primary btn-sm">
                         <i class="ti ti-plus"></i> Tambah
                     </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table align-middle" id="dataPengembalian">
-                            <thead class="table">
+                        <table class="table table-hover table-bordered align-middle mb-0" id="dataPengembalian">
+                            <thead class="table-primary">
                                 <tr>
                                     <th class="text-center" style="width: 5%">No</th>
                                     <th class="text-center">Nama User</th>
@@ -34,7 +44,7 @@
                                     <th class="text-center">Tgl Kembali</th>
                                     <th class="text-center">Kondisi</th>
                                     <th class="text-center">Denda</th>
-                                    <th class="text-center" style="width: 15%">Aksi</th>
+                                    <th class="text-center" style="width: 18%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,16 +64,25 @@
                                                 <span class="badge bg-danger">Hilang</span>
                                             @endif
                                         </td>
-                                        <td class="text-center">Rp {{ number_format($data->denda->sum('nominal'), 0, ',', '.') }}</td>
-                                        <td class="text-end">
-                                            <a href="{{ route('petugas.pengembalian.show', $data->id) }}" class="btn btn-sm btn-info" title="Detail"><i class="ti ti-eye"></i></a>
-                                            <a href="{{ route('petugas.pengembalian.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="ti ti-pencil"></i></a>
-                                            <form action="{{ route('petugas.pengembalian.destroy', $data->id) }}" method="POST" style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus"
-                                                    onclick="return confirm('Yakin ingin menghapus pengembalian ini?')"><i class="ti ti-trash"></i></button>
-                                            </form>
+                                        <td class="text-center">
+                                            Rp {{ number_format(optional($data->denda)->nominal ?? 0, 0, ',', '.') }}
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
+                                                <a href="{{ route('petugas.pengembalian.show', $data->id) }}" class="btn btn-sm btn-info" title="Detail">
+                                                    <i class="ti ti-eye"></i>
+                                                </a>
+                                                <a href="{{ route('petugas.pengembalian.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                    <i class="ti ti-pencil"></i>
+                                                </a>
+                                                <form action="{{ route('petugas.pengembalian.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengembalian ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                        <i class="ti ti-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

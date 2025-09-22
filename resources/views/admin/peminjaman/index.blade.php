@@ -8,24 +8,34 @@
     #dataPeminjaman th, #dataPeminjaman td {
         vertical-align: middle;
     }
+    .card {
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+    }
 </style>
 @endsection
 
 @section('content')
 <div class="container-fluid">
+    {{-- Judul Besar --}}
+    <h3 class="mb-3 fw-bold text-uppercase">PEMINJAMAN</h3>
+
     <div class="row">
         <div class="col">
-            <div class="card">
-                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Daftar Peminjaman</h5>
+            <div class="card shadow">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Data Peminjaman</h5>
                     <a href="{{ route('admin.peminjaman.create') }}" class="btn btn-primary btn-sm">
                         <i class="ti ti-plus"></i> Tambah
                     </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table align-middle" id="dataPeminjaman">
-                            <thead class="table">
+                        <table class="table table-hover table-bordered align-middle mb-0" id="dataPeminjaman">
+                            <thead class="table-primary">
                                 <tr>
                                     <th class="text-center" style="width: 5%">No</th>
                                     <th class="text-center">Nama User</th>
@@ -34,7 +44,7 @@
                                     <th class="text-center">Tgl Pinjam</th>
                                     <th class="text-center">Tgl Jatuh Tempo</th>
                                     <th class="text-center">Status</th>
-                                    <th class="text-center" style="width: 15%">Aksi</th>
+                                    <th class="text-center" style="width: 20%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -43,25 +53,59 @@
                                         <td class="text-center">{{ $index + 1 }}</td>
                                         <td class="text-center">{{ $data->user->name }}</td>
                                         <td class="text-center">{{ $data->buku->judul }}</td>
-                                        <td class="text-center">{{$data->jumlah_buku}}</td>
+                                        <td class="text-center">{{ $data->jumlah_buku }}</td>
                                         <td class="text-center">{{ $data->tgl_pinjam }}</td>
                                         <td class="text-center">{{ $data->tgl_jatuh_tempo }}</td>
                                         <td class="text-center">
-                                            @if ($data->status == 'dipinjam')
-                                                <span class="badge bg-warning text-dark">Dipinjam</span>
-                                            @else
-                                                <span class="badge bg-success">Dikembalikan</span>
+                                            @if ($data->status == 'pending')
+                                                <span class="badge bg-warning text-dark">Pending</span>
+                                            @elseif ($data->status == 'dipinjam')
+                                                <span class="badge bg-secondary">Dipinjam</span>
+                                            @elseif ($data->status == 'dikembalikan')
+                                                <span class="badge bg-success">kembali</span>
+                                            @elseif ($data->status == 'ditolak')
+                                                <span class="badge bg-danger">Ditolak</span>
                                             @endif
                                         </td>
-                                        <td class="text-end">
-                                            <a href="{{ route('admin.peminjaman.show', $data->id) }}" class="btn btn-sm btn-info" title="Detail"><i class="ti ti-eye"></i></a>
-                                            <a href="{{ route('admin.peminjaman.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="ti ti-pencil"></i></a>
-                                            <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus"
-                                                    onclick="return confirm('Yakin ingin menghapus peminjaman ini?')"><i class="ti ti-trash"></i></button>
-                                            </form>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
+                                                {{-- Tombol detail tetap ada --}}
+                                                <a href="{{ route('admin.peminjaman.show', $data->id) }}" 
+                                                   class="btn btn-sm btn-info" title="Detail">
+                                                    <i class="ti ti-eye"></i>
+                                                </a>
+
+                                                @if ($data->status == 'pending')
+                                                    {{-- Kalau masih pending → tampil ACC & Tolak --}}
+                                                    <form action="{{ route('admin.peminjaman.approve', $data->id) }}" method="POST" onsubmit="return confirm('Setujui peminjaman ini?')">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="btn btn-sm btn-success" title="Setujui"><i class="ti ti-check"></i></button>
+                                                    </form>
+                                                    <form action="{{ route('admin.peminjaman.reject', $data->id) }}" method="POST" onsubmit="return confirm('Tolak peminjaman ini?')">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="btn btn-sm btn-danger" title="Tolak"><i class="ti ti-x"></i></button>
+                                                    </form>
+                                                @elseif ($data->status == 'dipinjam')
+                                                    {{-- Kalau sudah di-ACC (dipinjam) → bisa edit & hapus --}}
+                                                    <a href="{{ route('admin.peminjaman.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="ti ti-pencil"></i></a>
+                                                    <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
+                                                    </form>
+                                                @elseif ($data->status == 'ditolak')
+                                                    {{-- Kalau ditolak → hanya bisa hapus --}}
+                                                    <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
+                                                    </form>
+                                                @elseif ($data->status == 'dikembalikan')
+                                                    {{-- Kalau sudah dikembalikan → hanya detail --}}
+                                                @endif
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

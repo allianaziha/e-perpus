@@ -4,9 +4,9 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    Detail User
+            <div class="card shadow">
+                <div class="card-header bg-white">
+                   <h5> Detail User</h5>
                 </div>
                 <div class="card-body">
                     <p><strong>ID:</strong> {{ $user->id }}</p>

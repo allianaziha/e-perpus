@@ -19,48 +19,64 @@ class LaporanController extends Controller
     {
         $awal   = $request->awal;
         $akhir  = $request->akhir;
-        $status = $request->status ?? 'semua'; // default semua
-        $tab    = $request->tab ?? 'buku';     // default tab Buku
+        $status = $request->status ?? '';
+        $tab    = $request->tab ?? 'buku';
 
-        $data = $this->getFilteredData($request);
+        $data = $this->getFilteredData($awal, $akhir, $status);
 
-        return view('admin.laporan.index', array_merge($data, [
-            'awal'   => $awal,
-            'akhir'  => $akhir,
-            'status' => $status,
-            'tab'    => $tab,
-        ]));
+        // Kirim juga tab, awal, akhir
+        $data['tab']   = $tab;
+        $data['awal']  = $awal;
+        $data['akhir'] = $akhir;
+        $data['status']= $status;
+
+        return view('admin.laporan.index', $data);
     }
 
-    // Export PDF (hanya tab aktif)
+    // Export PDF
     public function exportPDF(Request $request)
     {
-        $data = $this->getFilteredData($request);
-        $tab  = $request->tab ?? 'buku';
+        $awal   = $request->awal;
+        $akhir  = $request->akhir;
+        $status = $request->status ?? '';
+        $tab    = $request->tab ?? 'buku';
 
-        $pdf = Pdf::loadView('admin.laporan.pdf', array_merge($data, ['tab' => $tab]))
-                  ->setPaper('a4','portrait');
+        $data = $this->getFilteredData($awal, $akhir, $status);
+
+        // Kirim tab & tanggal juga ke blade PDF
+        $data['tab']   = $tab;
+        $data['awal']  = $awal;
+        $data['akhir'] = $akhir;
+        $data['status']= $status;
+
+        $pdf = Pdf::loadView('admin.laporan.rekap', $data)
+                  ->setPaper('a4', 'portrait');
 
         return $pdf->download("laporan-{$tab}.pdf");
     }
 
-    // Export Excel (hanya tab aktif)
+    // Export Excel
     public function exportExcel(Request $request)
     {
-        $data = $this->getFilteredData($request);
-        $tab  = $request->tab ?? 'buku';
+        $awal   = $request->awal;
+        $akhir  = $request->akhir;
+        $status = $request->status ?? '';
+        $tab    = $request->tab ?? 'buku';
+
+        $data = $this->getFilteredData($awal, $akhir, $status);
+
+        // Tambahkan info tab & tanggal
+        $data['tab']   = $tab;
+        $data['awal']  = $awal;
+        $data['akhir'] = $akhir;
+        $data['status']= $status;
 
         return Excel::download(new LaporanExport($data, $tab), "laporan-{$tab}.xlsx");
     }
 
-    // Ambil data sesuai filter (PDF/Excel)
-    private function getFilteredData($request)
+    // Ambil data sesuai filter
+    private function getFilteredData($awal, $akhir, $status)
     {
-        $awal   = $request->awal;
-        $akhir  = $request->akhir;
-        $status = $request->status ?? 'semua';
-
-        // Format tanggal untuk query
         $awalDate  = $awal ? $awal . ' 00:00:00' : null;
         $akhirDate = $akhir ? $akhir . ' 23:59:59' : null;
 
@@ -76,35 +92,34 @@ class LaporanController extends Controller
         if ($awalDate && $akhirDate) {
             $peminjaman->whereBetween('tgl_pinjam', [$awalDate, $akhirDate]);
         }
-
-        // Filter status peminjaman
-        if ($status === 'dikembalikan') {
-            $peminjaman->whereHas('pengembalian', function($q) use ($awalDate, $akhirDate) {
+        if ($status === 'dipinjam') {
+            $peminjaman->whereDoesntHave('pengembalian');
+        } elseif ($status === 'dikembalikan') {
+            $peminjaman->whereHas('pengembalian', function($q) use ($awalDate, $akhirDate){
                 if ($awalDate && $akhirDate) {
                     $q->whereBetween('tgl_kembali', [$awalDate, $akhirDate]);
                 }
             });
-        } elseif ($status === 'dipinjam') {
-            $peminjaman->whereDoesntHave('pengembalian');
         }
-
         $peminjaman = $peminjaman->get();
 
         // ==================== Pengembalian ====================
-        $pengembalian = Pengembalian::with(['peminjaman.user', 'peminjaman.buku']);
+        $pengembalian = Pengembalian::with(['peminjaman.user','peminjaman.buku']);
         if ($awalDate && $akhirDate) {
             $pengembalian->whereBetween('tgl_kembali', [$awalDate, $akhirDate]);
         }
         $pengembalian = $pengembalian->get();
 
         // ==================== Denda ====================
-        $denda = Denda::with(['pengembalian.peminjaman.user', 'pengembalian.peminjaman.buku']);
+        $denda = Denda::with(['pengembalian.peminjaman.user','pengembalian.peminjaman.buku']);
         if ($awalDate && $akhirDate) {
-            $denda->whereBetween('created_at', [$awalDate, $akhirDate]);
+            $denda->whereHas('pengembalian', function($q) use ($awalDate, $akhirDate) {
+                $q->whereBetween('tgl_kembali', [$awalDate, $akhirDate]);
+            });
         }
-        if (strtolower($status) === 'lunas') {
+        if ($status === 'lunas') {
             $denda->where('status', 'Lunas');
-        } elseif (strtolower($status) === 'belum_lunas') {
+        } elseif ($status === 'belum_lunas') {
             $denda->where('status', 'Belum Lunas');
         }
         $denda = $denda->get();
@@ -113,12 +128,10 @@ class LaporanController extends Controller
         $totalSemua      = $denda->sum('nominal');
         $totalSudahBayar = $denda->sum('dibayar');
         $totalSisa       = $totalSemua - $totalSudahBayar;
-        $totalLunas      = $denda->where('status', 'Lunas')->sum('nominal');
-        $totalBelum      = $denda->where('status', 'Belum Lunas')->sum('nominal');
+        $totalLunas      = $denda->where('status','Lunas')->sum('nominal');
+        $totalBelum      = $denda->where('status','Belum Lunas')->sum('nominal');
 
-        return compact(
-            'buku', 'peminjaman', 'pengembalian', 'denda',
-            'totalSemua','totalSudahBayar','totalSisa','totalLunas','totalBelum'
-        );
+        return compact('buku','peminjaman','pengembalian','denda',
+                       'totalSemua','totalSudahBayar','totalSisa','totalLunas','totalBelum');
     }
 }

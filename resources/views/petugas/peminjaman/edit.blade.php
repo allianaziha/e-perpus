@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    Edit Peminjaman
+                <div class="card-header bg-white">
+                    <h5>Edit Peminjaman</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('petugas.peminjaman.update', $peminjaman->id) }}" method="POST">
@@ -25,6 +25,7 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    @error('user_id') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>
 
@@ -39,6 +40,7 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    @error('buku_id') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>
@@ -47,6 +49,7 @@
                         <div class="mb-3">
                             <label for="tgl_pinjam" class="form-label">Tanggal Pinjam</label>
                             <input type="date" name="tgl_pinjam" class="form-control" value="{{ $peminjaman->tgl_pinjam }}">
+                            @error('tgl_pinjam') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Tombol -->

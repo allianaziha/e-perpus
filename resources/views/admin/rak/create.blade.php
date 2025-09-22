@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    Tambah Rak
+                <div class="card-header bg-white">
+                    <h5>Tambah Rak</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.rak.store') }}" method="POST">

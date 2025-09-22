@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    Detail Denda
+                <div class="card-header bg-white ">
+                    <h5>Detail Denda</h5>
                 </div>
                 <div class="card-body">
                     <p><strong>Peminjaman:</strong> 

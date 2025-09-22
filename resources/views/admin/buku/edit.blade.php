@@ -4,9 +4,9 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    Edit Buku
+            <div class="card shadow">
+                <div class="card-header bg-white">
+                    <h4>Edit Buku</h4>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
@@ -19,7 +19,7 @@
                                 <div class="mb-3">
                                     <label for="kode_buku" class="form-label">Kode Buku</label>
                                     <input type="text" name="kode_buku" value="{{ $buku->kode_buku }}" 
-                                    class="form-control @error('kode_buku') is-invalid @enderror">
+                                        class="form-control @error('kode_buku') is-invalid @enderror">
                                     @error('kode_buku') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
 
@@ -71,8 +71,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="rak_id" class="form-label">Rak</label>
-                                    <select name="rak_id"
-                                        class="form-control @error('rak_id') is-invalid @enderror">
+                                    <select name="rak_id" class="form-control @error('rak_id') is-invalid @enderror">
                                         @foreach ($rak as $r)
                                             <option value="{{ $r->id }}" {{ $buku->rak_id == $r->id ? 'selected' : '' }}>
                                                 {{ $r->nama }}
@@ -87,8 +86,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="kategori_id" class="form-label">Kategori</label>
-                                    <select name="kategori_id"
-                                        class="form-control @error('kategori_id') is-invalid @enderror">
+                                    <select name="kategori_id" class="form-control @error('kategori_id') is-invalid @enderror">
                                         @foreach ($kategori as $k)
                                             <option value="{{ $k->id }}" {{ $buku->kategori_id == $k->id ? 'selected' : '' }}>
                                                 {{ $k->nama }}
@@ -109,9 +107,15 @@
                                         alt="Gambar {{ $buku->judul }}" width="120" class="img-thumbnail">
                                 </div>
                             @endif
-                            <input type="file" name="gambar"
-                                class="form-control @error('gambar') is-invalid @enderror">
+                            <input type="file" name="gambar" class="form-control @error('gambar') is-invalid @enderror">
                             @error('gambar') <span class="text-danger">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Field Deskripsi -->
+                        <div class="mb-3">
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <textarea name="deskripsi" rows="4" class="form-control @error('deskripsi') is-invalid @enderror">{{ old('deskripsi', $buku->deskripsi) }}</textarea>
+                            @error('deskripsi') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
 
                         <!-- Tombol -->

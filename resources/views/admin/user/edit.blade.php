@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="card">
-        <div class="card-header bg-secondary text-dark">
-            <h5 class="mb-0">Edit User</h5>
+    <div class="card shadow">
+        <div class="card-header bg-white text-dark">
+            <h5>Edit User</h5>
         </div>
         <div class="card-body">
             <form action="{{ route('admin.user.update', $user->id) }}" method="POST">
@@ -29,6 +29,7 @@
                 <div class="mb-3">
                     <label for="role" class="form-label">Role</label>
                     <select name="role" id="role" class="form-select" required>
+                        <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
                         <option value="petugas" {{ $user->role == 'petugas' ? 'selected' : '' }}>Petugas</option>
                         <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                     </select>

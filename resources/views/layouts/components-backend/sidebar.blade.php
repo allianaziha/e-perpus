@@ -5,13 +5,16 @@
     <!-- ---------------------------------- -->
     <div class="brand-logo d-flex align-items-center justify-content-between">
       <a href="{{ url('/home') }}" class="text-nowrap logo-img d-flex align-items-center">
+        <!-- Logo Full -->
         <img src="{{ asset('assets/backend/images/logos/logo-perpus.png') }}" 
-            alt="" width="180" class=""/>
+            alt="Logo Perpus" width="180" class="logo-full" />
       </a>
-      <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
+    <!-- tombol toggle -->
+      <a href="javascript:void(0)" 
+        class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
         <i class="ti ti-x"></i>
       </a>
-    </div>
+  </div>
 
     <nav class="sidebar-nav scroll-sidebar" data-simplebar>
       <ul id="sidebarnav">

@@ -4,9 +4,9 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    Bayar Denda
+            <div class="card shadow">
+                <div class="card-header bg-white">
+                    <h4>Bayar Denda</h4>
                 </div>
                 <div class="card-body">
                     <p><strong>Peminjaman:</strong> 

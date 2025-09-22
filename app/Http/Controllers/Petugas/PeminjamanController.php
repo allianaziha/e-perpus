@@ -39,17 +39,22 @@ class PeminjamanController extends Controller
             'tgl_pinjam'  => 'required|date',
         ]);
 
-        // Carbon otomatis tambah 7 hari
-        $tglPinjam = $request->tgl_pinjam;
+        $tglPinjam     = $request->tgl_pinjam;
         $tglJatuhTempo = Carbon::parse($tglPinjam)->addDays(7)->format('Y-m-d');
 
+        if (auth()->check() && in_array(auth()->user()->role, ['admin','petugas'])) {
+        $status = 'dipinjam';
+        } else {
+            $status = 'pending';
+        }
+
         Peminjaman::create([
-            'user_id'        => $request->user_id,
-            'buku_id'        => $request->buku_id,
-            'jumlah_buku'    => $request->jumlah_buku,
-            'tgl_pinjam'     => $tglPinjam,
-            'tgl_jatuh_tempo'=> $tglJatuhTempo,
-            'status'         => 'dipinjam',
+            'user_id'         => $request->user_id,
+            'buku_id'         => $request->buku_id,
+            'jumlah_buku'     => $request->jumlah_buku,
+            'tgl_pinjam'      => $tglPinjam,
+            'tgl_jatuh_tempo' => $tglJatuhTempo,
+            'status'          => $status,
         ]);
 
         toast('Data berhasil disimpan', 'success');
@@ -58,6 +63,7 @@ class PeminjamanController extends Controller
 
     public function show(Peminjaman $peminjaman)
     {
+        $peminjaman->load(['user','buku']);
         return view('petugas.peminjaman.show', compact('peminjaman'));
     }
 
@@ -75,18 +81,19 @@ class PeminjamanController extends Controller
             'buku_id'     => 'required|exists:bukus,id',
             'jumlah_buku' => 'required|integer|min:1',
             'tgl_pinjam'  => 'required|date',
+            'status'      => 'in:pending,dipinjam,dikembalikan,ditolak',
         ]);
 
-        $tglPinjam = $request->tgl_pinjam;
+        $tglPinjam     = $request->tgl_pinjam;
         $tglJatuhTempo = Carbon::parse($tglPinjam)->addDays(7)->format('Y-m-d');
 
         $peminjaman->update([
-            'user_id'        => $request->user_id,
-            'buku_id'        => $request->buku_id,
-            'jumlah_buku'    => $request->jumlah_buku,
-            'tgl_pinjam'     => $tglPinjam,
-            'tgl_jatuh_tempo'=> $tglJatuhTempo,
-            // status jangan diupdate manual
+            'user_id'         => $request->user_id,
+            'buku_id'         => $request->buku_id,
+            'jumlah_buku'     => $request->jumlah_buku,
+            'tgl_pinjam'      => $tglPinjam,
+            'tgl_jatuh_tempo' => $tglJatuhTempo,
+            'status'          => $request->status ?? $peminjaman->status,
         ]);
 
         Alert::info('Diupdate', 'Data peminjaman berhasil diupdate!');
@@ -99,4 +106,37 @@ class PeminjamanController extends Controller
         Alert::error('Dihapus', 'Data peminjaman berhasil dihapus!');
         return redirect()->route('petugas.peminjaman.index');
     }
+
+    public function approve(Peminjaman $peminjaman)
+    {
+        if ($peminjaman->status !== 'pending') {
+            toast('Peminjaman sudah diproses', 'info');
+            return redirect()->route('petugas.peminjaman.index');
+        }
+
+        $peminjaman->update(['status' => 'dipinjam']);
+        toast('Peminjaman disetujui', 'success');
+        return redirect()->route('petugas.peminjaman.index');
+    }
+
+    public function reject(Peminjaman $peminjaman)
+    {
+        if ($peminjaman->status !== 'pending') {
+            toast('Peminjaman sudah diproses', 'info');
+            return redirect()->route('petugas.peminjaman.index');
+        }
+
+        $peminjaman->update(['status' => 'ditolak']);
+        Alert::warning('Ditolak', 'Peminjaman ditolak!');
+        return redirect()->route('petugas.peminjaman.index');
+    }
+
+    // PeminjamanController.php
+    public function notifikasi() 
+    {
+        $peminjaman = Peminjaman::with('user','buku','pengembalian')->latest()->get();
+
+        return view('petugas.peminjaman.notifikasi', compact('peminjaman'));
+    }
+
 }

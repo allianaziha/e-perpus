@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    Edit Peminjaman
+                <div class="card-header bg-white">
+                    <h5>Edit Peminjaman</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.peminjaman.update', $peminjaman->id) }}" method="POST">

@@ -16,7 +16,7 @@
 
     <!-- Form container -->
     <div class="flex items-center justify-center h-screen relative z-10">
-        <div class="bg-white bg-opacity-85 rounded-xl shadow-lg p-8 w-full max-w-md">
+        <div class="bg-white bg-opacity-75 rounded-xl shadow-lg p-8 w-full max-w-md">
            <!-- Ganti teks jadi logo -->
             <div class="text-center">
                 <img src="{{ asset('assets/images/logo-perpus.png') }}" alt="Logo Perpustakaan" class="mx-auto w-30 h-20 mb-4">

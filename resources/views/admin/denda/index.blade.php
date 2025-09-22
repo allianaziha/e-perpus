@@ -8,21 +8,31 @@
     #dataDenda th, #dataDenda td {
         vertical-align: middle;
     }
+    .card {
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+    }
 </style>
 @endsection
 
 @section('content')
 <div class="container-fluid">
+    {{-- Judul Besar --}}
+    <h3 class="mb-3 fw-bold text-uppercase">Denda</h3>
+
     <div class="row">
         <div class="col">
-            <div class="card">
-                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+            <div class="card shadow">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Data Denda</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table align-middle" id="dataDenda">
-                            <thead class="table">
+                        <table class="table table-hover table-bordered align-middle" id="dataDenda">
+                            <thead class="table-primary">
                                 <tr>
                                     <th class="text-center" style="width: 5%">No</th>
                                     <th class="text-center">Peminjaman</th>
@@ -30,7 +40,7 @@
                                     <th class="text-center">Sudah Dibayar</th>
                                     <th class="text-center">Sisa</th>
                                     <th class="text-center">Status</th>
-                                    <th class="text-center" style="width: 15%">Aksi</th>
+                                    <th class="text-center" style="width: 18%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,15 +59,16 @@
                                                 {{ ucfirst($data->status) }}
                                             </span>
                                         </td>
-                                        <td class="text-end">
-                                            <a href="{{ route('admin.denda.show', $data->id) }}" class="btn btn-sm btn-info" title="Detail"><i class="ti ti-eye"></i></a>
-                                            <a href="{{ route('admin.denda.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="ti ti-pencil"></i></a>
-                                            <form action="{{ route('admin.denda.destroy', $data->id) }}" method="POST" style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus"
-                                                    onclick="return confirm('Yakin ingin menghapus denda ini?')"><i class="ti ti-trash"></i></button>
-                                            </form>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center gap-1">
+                                                <a href="{{ route('admin.denda.show', $data->id) }}" class="btn btn-sm btn-info" title="Detail"><i class="ti ti-eye"></i></a>
+                                                <a href="{{ route('admin.denda.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="ti ti-pencil"></i></a>
+                                                <form action="{{ route('admin.denda.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus denda ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -78,3 +89,4 @@
     new DataTable('#dataDenda');
 </script>
 @endpush
+

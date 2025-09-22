@@ -185,7 +185,9 @@
                                         <span class="badge bg-danger">Hilang</span>
                                     @endif
                                 </td>
-                                <td>Rp {{ number_format($item->denda->nominal, 0, ',', '.') }}</td>
+                                <td class="text-center">
+                                    Rp {{ number_format(optional($item->denda)->nominal ?? 0, 0, ',', '.') }}
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

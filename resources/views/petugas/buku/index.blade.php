@@ -8,34 +8,43 @@
     #dataBuku th, #dataBuku td {
         vertical-align: middle;
     }
+    .card {
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+    }
 </style>
 @endsection
 
 @section('content')
 <div class="container-fluid">
+    {{-- Judul Besar --}}
+    <h3 class="mb-3 fw-bold text-uppercase">BUKU</h3>
+
     <div class="row">
         <div class="col">
-            <div class="card">
-                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Daftar Buku</h5>
+            <div class="card shadow">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Data Buku</h5>
                     <a href="{{ route('petugas.buku.create') }}" class="btn btn-primary btn-sm">
                         <i class="ti ti-plus"></i> Tambah
                     </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table align-middle" id="dataBuku">
-                            <thead class="table">
+                        <table class="table table-hover table-bordered align-middle mb-0" id="dataBuku">
+                            <thead class="table-primary">
                                 <tr>
-                                    <th class="text-center" style="width: 1%">No</th>
+                                    <th class="text-center" style="width: 5%">No</th>
                                     <th class="text-center">Kode Buku</th>
                                     <th class="text-center">Judul</th>
                                     <th class="text-center">Penulis</th>
                                     <th class="text-center">Stok</th>
                                     <th class="text-center">Gambar</th>
-                                    <th class="text-center">Rak</th>
-                                    <th class="text-center">Kategori</th>
-                                    <th class="text-center" style="width: 15%">Aksi</th>
+                                    <th class="">Deskripsi</th>
+                                    <th class="text-center" style="width: 18%">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,20 +57,25 @@
                                     <td class="text-center">{{ $data->stok }}</td>
                                     <td class="text-center">
                                         @if($data->gambar)
-                                            <img src="{{ asset('images/buku/'.$data->gambar) }}" alt="{{ $data->judul }}" style="width: 80px; height: 80px; object-fit: cover;">
+                                            <img src="{{ asset('images/buku/'.$data->gambar) }}" 
+                                                 alt="{{ $data->judul }}" 
+                                                 style="width: 60px; height: 60px; object-fit: cover;"
+                                                 class="rounded shadow-sm">
+                                        @else
+                                            <span class="text-muted">-</span>
                                         @endif
                                     </td>
-                                    <td class="text-center">{{ $data->rak->nama }}</td>
-                                    <td class="text-center">{{ $data->kategori->nama }}</td>
-                                    <td class="text-end">
-                                        <a href="{{ route('petugas.buku.show', $data->id) }}" class="btn btn-sm btn-info" title="Detail"><i class="ti ti-eye"></i></a>
-                                        <a href="{{ route('petugas.buku.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="ti ti-pencil"></i></a>
-                                        <form action="{{ route('petugas.buku.destroy', $data->id) }}" method="POST" style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus"
-                                                onclick="return confirm('Yakin ingin menghapus buku ini?')"><i class="ti ti-trash"></i></button>
-                                        </form>
+                                    <td>{{ Str::words($data->deskripsi, 1, '...') }}</td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <a href="{{ route('petugas.buku.show', $data->id) }}" class="btn btn-sm btn-info" title="Detail"><i class="ti ti-eye"></i></a>
+                                            <a href="{{ route('petugas.buku.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="ti ti-pencil"></i></a>
+                                            <form action="{{ route('petugas.buku.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus buku ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach

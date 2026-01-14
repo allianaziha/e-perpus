@@ -9,3 +9,34 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+.book-square-card {
+  width: 200px;      /* kotak 200x200 */
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  margin: auto;
+}
+
+.book-square-img {
+  width: 100%;
+  height: 120px;       /* bagian gambar fix */
+  object-fit: cover;   /* biar rapi */
+}
+
+.book-square-body {
+  padding: 5px;
+}
+
+.book-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

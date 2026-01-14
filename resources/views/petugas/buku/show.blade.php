@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="card-footer d-flex justify-content-between">
-                    <a href="{{ route('petugas.dashboard') }}" class="btn btn-sm btn-outline-secondary">Kembali</a>
+                    <a href="{{ route('petugas.buku.index') }}" class="btn btn-sm btn-secondary">Kembali</a>
                 </div>
             </div>
         </div>

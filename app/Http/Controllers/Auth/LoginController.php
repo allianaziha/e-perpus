@@ -34,10 +34,10 @@ class LoginController extends Controller
         }
 
         if (auth()->user()->role === 'petugas') {
-            return '/petugas/buku';
+            return '/petugas/dashboard';
         }
 
-        return '/home'; // default untuk user biasa
+        return '/'; // default untuk user biasa
     }
 
 

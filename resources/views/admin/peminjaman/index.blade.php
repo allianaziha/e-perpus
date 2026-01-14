@@ -71,7 +71,7 @@
                                             <div class="d-flex justify-content-center gap-1">
                                                 {{-- Tombol detail tetap ada --}}
                                                 <a href="{{ route('admin.peminjaman.show', $data->id) }}" 
-                                                   class="btn btn-sm btn-info" title="Detail">
+                                                class="btn btn-sm btn-info" title="Detail">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
 
@@ -87,14 +87,18 @@
                                                         @method('PATCH')
                                                         <button type="submit" class="btn btn-sm btn-danger" title="Tolak"><i class="ti ti-x"></i></button>
                                                     </form>
+
                                                 @elseif ($data->status == 'dipinjam')
                                                     {{-- Kalau sudah di-ACC (dipinjam) → bisa edit & hapus --}}
-                                                    <a href="{{ route('admin.peminjaman.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit"><i class="ti ti-pencil"></i></a>
+                                                    <a href="{{ route('admin.peminjaman.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                        <i class="ti ti-pencil"></i>
+                                                    </a>
                                                     <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
                                                     </form>
+
                                                 @elseif ($data->status == 'ditolak')
                                                     {{-- Kalau ditolak → hanya bisa hapus --}}
                                                     <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
@@ -102,8 +106,17 @@
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
                                                     </form>
+
                                                 @elseif ($data->status == 'dikembalikan')
-                                                    {{-- Kalau sudah dikembalikan → hanya detail --}}
+                                                    {{-- Kalau sudah dikembalikan → bisa edit & hapus juga --}}
+                                                    <a href="{{ route('admin.peminjaman.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                        <i class="ti ti-pencil"></i>
+                                                    </a>
+                                                    <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
+                                                    </form>
                                                 @endif
                                             </div>
                                         </td>

@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header bg-white">
                     <h5>Detail Pengembalian</h5>
                 </div>

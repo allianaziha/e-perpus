@@ -8,20 +8,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Favicon icon-->
-  <link rel="shortcut icon" type="image/png" href="{{asset('assets/backend/images/logos/favicon.png')}}" />
+  <link rel="shortcut icon" type="image/png" href="{{asset('assets/backend/images/logos/logo-mini.png')}}" />
 
   <!-- Core Css -->
   <link rel="stylesheet" href="{{asset('assets/backend/css/styles.css')}}" />
   @yield('styles')
   <title>@yield('title', 'Admin Perpustakaan')</title>
-  <!-- Owl Carousel  -->
+  <!-- Owl Carousel  --> 
   <link rel="stylesheet" href="{{asset('assets/backend/libs/owl.carousel/dist/assets/owl.carousel.min.css')}}" />
 </head>
 
 <body>
   <!-- Preloader -->
   <div class="preloader">
-    <img src="{{asset('/assets/backend/images/logos/favicon.png')}}" alt="loader" class="lds-ripple img-fluid" />
+    <img src="{{asset('/assets/backend/images/logos/logo-mini.png')}}" alt="loader" class="lds-ripple img-fluid" />
   </div>
   <div id="main-wrapper">
     <!-- Sidebar Start -->

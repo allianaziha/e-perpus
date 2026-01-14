@@ -22,7 +22,7 @@
 <div class="container-fluid">
     {{-- Judul Besar --}}
     <h3 class="mb-3 fw-bold text-uppercase">PEMINJAMAN</h3>
-
+     <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 10px 0;">
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -103,7 +103,15 @@
                                                         <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
                                                     </form>
                                                 @elseif ($data->status == 'dikembalikan')
-                                                    {{-- Detail aja --}}
+                                                    {{-- Kalau sudah dikembalikan → bisa edit & hapus juga --}}
+                                                    <a href="{{ route('petugas.peminjaman.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                        <i class="ti ti-pencil"></i>
+                                                    </a>
+                                                    <form action="{{ route('petugas.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
+                                                    </form>
                                                 @endif
                                             </div>
                                         </td>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Pengembalian;  
 use App\Models\Peminjaman;  
 use App\Models\Denda;  
+use App\Models\Buku;
 use Carbon\Carbon;  
 use Alert;  
 
@@ -38,21 +39,33 @@ class PengembalianController extends Controller
             'kondisi'       => $request->kondisi,  
         ]);  
 
+        // Ambil data peminjaman & buku
+        $peminjaman = $pengembalian->peminjaman;
+        $buku = $peminjaman->buku;
+
+        // Tambahkan stok buku kembali sesuai jumlah yang dipinjam
+        $buku->stok += $peminjaman->jumlah_buku;
+        $buku->save();
+
+        // Update status peminjaman jadi "dikembalikan"
+        $peminjaman->update(['status' => 'dikembalikan']);
+
         // ===== Hitung Denda =====
-        $peminjaman     = $pengembalian->peminjaman;  
-        $tgl_jatuh_tempo= Carbon::parse($peminjaman->tgl_jatuh_tempo);  
-        $tgl_kembali    = Carbon::parse($request->tgl_kembali);  
+        $tgl_jatuh_tempo = Carbon::parse($peminjaman->tgl_jatuh_tempo);  
+        $tgl_kembali     = Carbon::parse($request->tgl_kembali);  
 
         $jumlah_hari = 0;  
         $total_denda = 0;  
         $jenis = [];  
 
+        // Telat
         if ($tgl_kembali->gt($tgl_jatuh_tempo)) {  
             $jumlah_hari = $tgl_jatuh_tempo->diffInDays($tgl_kembali);  
             $total_denda += $jumlah_hari * 5000;  
             $jenis[] = 'telat';  
         }  
 
+        // Kondisi Buku
         if ($request->kondisi === 'rusak') {  
             $total_denda += 20000;  
             $jenis[] = 'rusak';  
@@ -61,6 +74,7 @@ class PengembalianController extends Controller
             $jenis[] = 'hilang';  
         }  
 
+        // Simpan denda kalau ada
         if ($total_denda > 0) {  
             Denda::create([  
                 'pengembalian_id' => $pengembalian->id,  
@@ -70,7 +84,7 @@ class PengembalianController extends Controller
             ]);  
         }  
 
-        Alert::success('Berhasil', 'Pengembalian berhasil dicatat.');  
+        Alert::success('Berhasil', 'Pengembalian berhasil dicatat');  
         return redirect()->route('petugas.pengembalian.index');  
     }  
 
@@ -98,6 +112,7 @@ class PengembalianController extends Controller
             'kondisi'     => $request->kondisi,  
         ]);  
 
+        // Hitung ulang denda
         $pengembalian->denda()->delete();  
 
         $peminjaman     = $pengembalian->peminjaman;  
@@ -118,7 +133,7 @@ class PengembalianController extends Controller
             $total_denda += 20000;  
             $jenis[] = 'rusak';  
         } elseif ($request->kondisi === 'hilang') {  
-            $total_denda += 20000;  
+            $total_denda += 50000;  
             $jenis[] = 'hilang';  
         }  
 
@@ -137,10 +152,29 @@ class PengembalianController extends Controller
 
     public function destroy(Pengembalian $pengembalian)  
     {  
+        // Ambil data peminjaman terkait
+        $peminjaman = $pengembalian->peminjaman;
+
+        // Rollback stok buku saat pengembalian dihapus
+        if ($peminjaman && $peminjaman->buku) {
+            $peminjaman->buku->stok -= $peminjaman->jumlah_buku;
+            $peminjaman->buku->save();
+        }
+
+        // Ubah status peminjaman jadi 'dipinjam' lagi
+        if ($peminjaman) {
+            $peminjaman->update([
+                'status' => 'dipinjam',
+            ]);
+        }
+
+        // Hapus denda terkait
         $pengembalian->denda()->delete();  
+
+        // Hapus data pengembalian
         $pengembalian->delete();  
 
-        Alert::success('Berhasil', 'Pengembalian berhasil dihapus.');  
+        Alert::success('Berhasil', 'Pengembalian berhasil dihapus');  
         return redirect()->route('petugas.pengembalian.index');  
     }  
-}  
+}

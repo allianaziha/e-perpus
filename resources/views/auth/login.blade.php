@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Perpustakaan</title>
+
+    <!-- Favicon icon -->
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/backend/images/logos/logo-mini.png') }}" />
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -11,7 +15,7 @@
 
     <!-- Background perpustakaan -->
     <div class="fixed inset-0 bg-cover bg-center" 
-        style="background-image: url('{{ asset('assets/images/bg-perpus.jpg') }}'); filter: brightness(0.5);">
+        style="background-image: url('{{ asset('assets/images/bg-perpus.jpg') }}'); filter: brightness(0.8);">
     </div>
 
     <!-- Form container -->
@@ -47,19 +51,17 @@
                         class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
-                <div class="flex items-center justify-between mb-4">
-                    <label class="inline-flex items-center text-gray-700">
-                        <input type="checkbox" name="remember" class="form-checkbox">
-                        <span class="ml-2 text-sm">Remember me</span>
-                    </label>
-                    <a href="#" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
-                </div>
-
                 <button type="submit"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">
                     Login
                 </button>
             </form>
+            <div class="text-center mt-4">
+                <p class="text-sm text-gray-700">
+                    Belum punya akun? 
+                    <a href="{{ route('register') }}" class="text-blue-600 hover:underline font-medium">Register</a>
+                </p>
+            </div>
         </div>
     </div>
 

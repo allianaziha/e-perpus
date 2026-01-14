@@ -22,7 +22,7 @@
 <div class="container-fluid">
     {{-- Judul Besar --}}
     <h3 class="mb-3 fw-bold text-uppercase">Denda</h3>
-
+     <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 10px 0;">
     <div class="row">
         <div class="col">
             <div class="card shadow">

@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header bg-secondary text-white">
                     Tambah Peminjaman
                 </div>

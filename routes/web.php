@@ -1,14 +1,15 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\RakController;
-use App\Http\Controllers\Admin\BukuController;
+use App\Http\Controllers\Admin\BukuController as AdminBukuController;;
 use App\Http\Controllers\Admin\PeminjamanController;
 use App\Http\Controllers\Admin\PengembalianController;
 use App\Http\Controllers\Admin\DendaController;
 use App\Http\Controllers\Admin\DashboardController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Petugas\BukuController as PetugasBukuController;
@@ -16,12 +17,11 @@ use App\Http\Controllers\Petugas\PeminjamanController as PetugasPeminjamanContro
 use App\Http\Controllers\Petugas\PengembalianController as PetugasPengembalianController;
 use App\Http\Controllers\Petugas\DendaController as PetugasDendaController;
 use App\Http\Controllers\Petugas\DashboardController as PetugasDashboardController;
+use App\Http\Controllers\Petugas\UserController as PetugasUserController;
+use App\Http\Controllers\BukuController;
+use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\PinjamController;
 
-
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Auth::routes();
 
@@ -31,7 +31,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('kategori', KategoriController::class);
     Route::resource('rak', RakController::class);
-    Route::resource('buku', BukuController::class);
+    Route::resource('buku', AdminBukuController::class);
     Route::resource('peminjaman', PeminjamanController::class);
     Route::patch('peminjaman/{peminjaman}/approve', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
     Route::patch('peminjaman/{peminjaman}/reject', [PeminjamanController::class, 'reject'])->name('peminjaman.reject');
@@ -41,6 +41,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('laporan/pdf', [LaporanController::class, 'exportPDF'])->name('laporan.exportPDF');
     Route::get('laporan/excel', [LaporanController::class, 'exportExcel'])->name('laporan.exportExcel');
+    Route::resource('banner', BannerController::class);
+
 });
 
 Route::prefix('petugas')->name('petugas.')->group(function () {
@@ -51,10 +53,33 @@ Route::prefix('petugas')->name('petugas.')->group(function () {
     Route::patch('peminjaman/{peminjaman}/reject', [PetugasPeminjamanController::class, 'reject'])->name('peminjaman.reject');
     Route::resource('pengembalian', PetugasPengembalianController::class);
     Route::resource('denda', PetugasDendaController::class);  
+    Route::resource('user', PetugasUserController::class);
 });
 
 // routes/web.php
 Route::middleware(['auth','role:admin,petugas'])->group(function() {
     Route::get('/peminjaman/notifikasi', [PeminjamanController::class, 'notifikasi'])
         ->name('peminjaman.notifikasi');
+});
+
+Route::get('/', [BerandaController::class, 'index'])->name('home');
+
+Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
+
+// Filter berdasarkan kategori
+Route::get('/buku/kategori/{id}', [BukuController::class, 'filter'])->name('buku.filter');
+
+// Semua buku (dengan atau tanpa filter kategori)
+Route::get('/buku-semua', [BukuController::class, 'semua'])->name('buku.semua');
+Route::get('/buku-semua/kategori/{kategori_id}', [BukuController::class, 'semua'])->name('buku.semua.kategori');
+
+// Detail buku
+Route::get('/buku/{id}', [BukuController::class, 'detail'])->name('buku.detail');
+
+// ===============================
+// Aksi yang butuh login
+// ===============================
+Route::middleware(['auth'])->group(function () {
+    Route::post('/peminjaman', [PinjamController::class, 'store'])->name('peminjaman.store');
+    Route::get('/riwayat-peminjaman', [PinjamController::class, 'riwayat'])->name('riwayat.peminjaman');
 });

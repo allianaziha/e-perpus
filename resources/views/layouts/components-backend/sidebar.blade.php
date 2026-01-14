@@ -15,9 +15,11 @@
         <i class="ti ti-x"></i>
       </a>
   </div>
-
+                     
     <nav class="sidebar-nav scroll-sidebar" data-simplebar>
       <ul id="sidebarnav">
+        <li class="nav-small-cap mt-3">
+          <span class="hide-menu text-uppercase fw-bold text-muted">Menu Utama</span>
 
         {{-- Menu untuk Admin --}}
         @if(Auth::user()->role == 'admin')
@@ -75,6 +77,12 @@
               <span class="hide-menu">Laporan</span>
             </a>
           </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('admin.banner.index') }}">
+              <i class="ti ti-photo"></i>
+              <span class="hide-menu">Banner</span>
+            </a>
+          </li> 
         @endif
 
         {{-- Menu untuk Petugas --}}
@@ -85,6 +93,12 @@
               <span class="hide-menu">Dashboard</span>
             </a>
           </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('petugas.user.index') }}">
+              <i class="ti ti-users"></i>
+              <span class="hide-menu">Data User</span>
+            </a>
+          </li> 
           <li class="sidebar-item">
             <a class="sidebar-link" href="{{ route('petugas.buku.index') }}">
               <i class="ti ti-book-2"></i>
@@ -111,6 +125,15 @@
           </li>
         @endif
 
+        <li class="nav-small-cap mt-3">
+          <span class="hide-menu text-uppercase fw-bold text-muted">Menu Lainnya</span>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{{ url('/') }}">
+            <i class="ti ti-user"></i>
+            <span class="hide-menu">User</span>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- ---------------------------------- -->

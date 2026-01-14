@@ -42,11 +42,23 @@ class PeminjamanController extends Controller
         $tglPinjam     = $request->tgl_pinjam;
         $tglJatuhTempo = Carbon::parse($tglPinjam)->addDays(7)->format('Y-m-d');
 
-       if (auth()->check() && in_array(auth()->user()->role, ['admin','petugas'])) {
-        $status = 'dipinjam';
-    } else {
-        $status = 'pending';
-    }
+        if (auth()->check() && in_array(auth()->user()->role, ['admin','petugas'])) {
+            $status = 'dipinjam';
+        } else {
+            $status = 'pending';
+        }
+
+        // ambil buku
+        $buku = Buku::findOrFail($request->buku_id);
+
+        // cek stok jika status langsung dipinjam
+        if ($status == 'dipinjam') {
+            if ($request->jumlah_buku > $buku->stok) {
+                return back()->with('error', 'Stok buku tidak cukup!');
+            }
+            $buku->stok -= $request->jumlah_buku;
+            $buku->save();
+        }
 
         Peminjaman::create([
             'user_id'         => $request->user_id,
@@ -114,7 +126,20 @@ class PeminjamanController extends Controller
             return redirect()->route('admin.peminjaman.index');
         }
 
+        $buku = $peminjaman->buku;
+
+        // cek stok
+        if ($peminjaman->jumlah_buku > $buku->stok) {
+            toast('Stok buku tidak cukup untuk peminjaman!', 'error');
+            return redirect()->route('admin.peminjaman.index');
+        }
+
+        // kurangi stok
+        $buku->stok -= $peminjaman->jumlah_buku;
+        $buku->save();
+
         $peminjaman->update(['status' => 'dipinjam']);
+
         toast('Peminjaman disetujui', 'success');
         return redirect()->route('admin.peminjaman.index');
     }
@@ -131,13 +156,10 @@ class PeminjamanController extends Controller
         return redirect()->route('admin.peminjaman.index');
     }
 
-   // PeminjamanController.php
     public function notifikasi()
     {
         $peminjaman = Peminjaman::with('user','buku','pengembalian')->latest()->get();
 
         return view('admin.peminjaman.index', compact('peminjaman'));
     }
-
 }
-

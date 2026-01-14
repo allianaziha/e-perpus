@@ -43,9 +43,19 @@ class PeminjamanController extends Controller
         $tglJatuhTempo = Carbon::parse($tglPinjam)->addDays(7)->format('Y-m-d');
 
         if (auth()->check() && in_array(auth()->user()->role, ['admin','petugas'])) {
-        $status = 'dipinjam';
+            $status = 'dipinjam';
         } else {
             $status = 'pending';
+        }
+
+        $buku = Buku::findOrFail($request->buku_id);
+
+        if ($status == 'dipinjam') {
+            if ($request->jumlah_buku > $buku->stok) {
+                return back()->with('error', 'Stok buku tidak cukup!');
+            }
+            $buku->stok -= $request->jumlah_buku;
+            $buku->save();
         }
 
         Peminjaman::create([
@@ -102,6 +112,15 @@ class PeminjamanController extends Controller
 
     public function destroy(Peminjaman $peminjaman)
     {
+        // rollback stok jika status masih dipinjam
+        if (in_array($peminjaman->status, ['dipinjam', 'dikembalikan'])) {
+            $buku = $peminjaman->buku;
+            if ($buku) {
+                $buku->stok += $peminjaman->jumlah_buku;
+                $buku->save();
+            }
+        }
+
         $peminjaman->delete();
         Alert::error('Dihapus', 'Data peminjaman berhasil dihapus!');
         return redirect()->route('petugas.peminjaman.index');
@@ -114,7 +133,18 @@ class PeminjamanController extends Controller
             return redirect()->route('petugas.peminjaman.index');
         }
 
+        $buku = $peminjaman->buku;
+
+        if ($peminjaman->jumlah_buku > $buku->stok) {
+            toast('Stok buku tidak cukup untuk peminjaman!', 'error');
+            return redirect()->route('petugas.peminjaman.index');
+        }
+
+        $buku->stok -= $peminjaman->jumlah_buku;
+        $buku->save();
+
         $peminjaman->update(['status' => 'dipinjam']);
+
         toast('Peminjaman disetujui', 'success');
         return redirect()->route('petugas.peminjaman.index');
     }
@@ -131,12 +161,9 @@ class PeminjamanController extends Controller
         return redirect()->route('petugas.peminjaman.index');
     }
 
-    // PeminjamanController.php
     public function notifikasi() 
     {
         $peminjaman = Peminjaman::with('user','buku','pengembalian')->latest()->get();
-
-        return view('petugas.peminjaman.notifikasi', compact('peminjaman'));
+        return view('petugas.peminjaman.index', compact('peminjaman'));
     }
-
 }

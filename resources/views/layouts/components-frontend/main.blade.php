@@ -1,3 +1,17 @@
+<style>
+  .hover-zoom {
+    overflow: hidden;
+  }
+
+  .hover-zoom img {
+    transition: transform 0.35s ease;
+  }
+
+  .hover-zoom:hover img {
+    transform: scale(1.08);
+  }
+</style>
+
 <section id="highlight-books" class="section">
   <div class="container section-title text-center">
     <h2>Perpustakaan</h2>
@@ -27,7 +41,8 @@
         <div class="row g-4">
           @foreach($populer as $buku)
             <div class="col-md-3 d-flex justify-content-center">
-              <div class="card shadow-sm border-0 rounded-4 overflow-hidden" style="width: 100%; max-width: 250px; height: 380px;">
+              <div class="card shadow-sm border-0 rounded-4 hover-zoom"
+                   style="width: 100%; max-width: 250px; height: 380px;">
                 <a href="{{ route('buku.detail', $buku->id) }}" class="text-decoration-none d-block h-100">
                   <img src="{{ asset('images/buku/'.$buku->gambar) }}" 
                        alt="{{ $buku->judul }}" 
@@ -44,7 +59,8 @@
         <div class="row g-4">
           @foreach($terbaru as $buku)
             <div class="col-md-3 d-flex justify-content-center">
-              <div class="card shadow-sm border-0 rounded-4 overflow-hidden position-relative" style="width: 100%; max-width: 250px; height: 380px;">
+              <div class="card shadow-sm border-0 rounded-4 position-relative hover-zoom"
+                   style="width: 100%; max-width: 250px; height: 380px;">
                 <a href="{{ route('buku.detail', $buku->id) }}" class="d-block h-100 text-decoration-none">
                   <img src="{{ asset('images/buku/'.$buku->gambar) }}" 
                        alt="{{ $buku->judul }}" 
@@ -55,11 +71,12 @@
           @endforeach
         </div>
       </div>
-       <div class="text-center mt-3">
-      <a href="{{ route('buku.semua') }}" class="btn btn-primary px-4 py-2 rounded-3">
-        Lihat Semua Buku
-      </a>
-    </div>
+
+      <div class="text-center mt-3">
+        <a href="{{ route('buku.semua') }}" class="btn btn-primary px-4 py-2 rounded-3">
+          Lihat Semua Buku
+        </a>
+      </div>
     </div>
   </div>
 </section>

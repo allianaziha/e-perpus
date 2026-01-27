@@ -37,4 +37,10 @@ class Buku extends Model
     {
         return $this->hasMany(Peminjaman::class);
     }
+
+    public function chartPinjam()
+    {
+        return $this->hasMany(ChartPinjam::class);
+    }
+
 }

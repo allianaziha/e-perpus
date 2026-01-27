@@ -20,9 +20,15 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar',
         'password',
         'role',
     ];
+
+    public function chartPinjam()
+    {
+        return $this->hasMany(ChartPinjam::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

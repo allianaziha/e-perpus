@@ -1,4 +1,4 @@
-<footer id="footer" class="footer py-4">
+<footer id="footer" class="footer py-4" style="background:#d9e6f2; color:#1a1a1a;">
   <div class="container">
     <div class="row gy-3">
 
@@ -10,9 +10,9 @@
       <div class="col-lg-2 col-md-3">
         <h5>Menu</h5>
         <ul class="list-unstyled">
-          <li><a href="{{ url('/') }}">Beranda</a></li>
-          <li><a href="{{ url('/buku') }}">Buku</a></li>
-          <li><a href="{{ url('/peminjaman') }}">Peminjaman</a></li>
+          <li><a href="{{ url('/') }}" style="color:#1a1a1a; text-decoration:none;">Beranda</a></li>
+          <li><a href="{{ url('/buku') }}" style="color:#1a1a1a; text-decoration:none;">Buku</a></li>
+          <li><a href="{{ url('/peminjaman') }}" style="color:#1a1a1a; text-decoration:none;">Peminjaman</a></li>
         </ul>
       </div>
 
@@ -25,9 +25,9 @@
       <div class="col-lg-3 col-md-12">
         <h5>Sosial Media</h5>
         <div class="d-flex gap-3">
-          <a href="#"><i class="bi bi-instagram"></i></a>
-          <a href="#"><i class="bi bi-facebook"></i></a>
-          <a href="#"><i class="bi bi-youtube"></i></a>
+          <a href="#" style="color:#1a1a1a;"><i class="bi bi-instagram"></i></a>
+          <a href="#" style="color:#1a1a1a;"><i class="bi bi-facebook"></i></a>
+          <a href="#" style="color:#1a1a1a;"><i class="bi bi-youtube"></i></a>
         </div>
       </div>
 

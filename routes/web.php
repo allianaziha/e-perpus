@@ -21,6 +21,8 @@ use App\Http\Controllers\Petugas\UserController as PetugasUserController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\PinjamController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ChartPinjamController;
 
 
 Auth::routes();
@@ -79,7 +81,22 @@ Route::get('/buku/{id}', [BukuController::class, 'detail'])->name('buku.detail')
 // ===============================
 // Aksi yang butuh login
 // ===============================
-Route::middleware(['auth'])->group(function () {
-    Route::post('/peminjaman', [PinjamController::class, 'store'])->name('peminjaman.store');
-    Route::get('/riwayat-peminjaman', [PinjamController::class, 'riwayat'])->name('riwayat.peminjaman');
+
+Route::get('/profile', [ProfileController::class, 'show'])
+    ->name('profile.show');
+
+Route::post('/profile/update', [ProfileController::class, 'update'])
+    ->name('profile.update');
+
+Route::post('/profile/delete-avatar', [ProfileController::class, 'deleteAvatar'])
+    ->name('profile.deleteAvatar');
+
+// ChartPinjam
+Route::prefix('chart-pinjam')->middleware('auth')->group(function () {
+    Route::get('/', [ChartPinjamController::class, 'index'])->name('chart.pinjam.index');
+    Route::post('/add/{buku}', [ChartPinjamController::class, 'add'])->name('chart.pinjam.add');
+    Route::put('/update/{id}', [ChartPinjamController::class, 'update'])->name('chart.pinjam.update');
+    Route::delete('/remove/{id}', [ChartPinjamController::class, 'remove'])->name('chart.pinjam.remove');
+    Route::get('/checkout', [ChartPinjamController::class, 'checkout'])->name('chart.pinjam.checkout');
 });
+

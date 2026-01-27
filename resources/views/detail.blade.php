@@ -6,151 +6,162 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
   <title>{{ $buku->judul }} - e-Perpus</title>
 
-  <!-- Favicons -->
-  <link rel="shortcut icon" type="image/png" href="{{ asset('assets/backend/images/logos/logo-mini.png') }}" />
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/png"
+        href="{{ asset('assets/backend/images/logos/logo-mini.png') }}" />
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
   <!-- Vendor CSS -->
   <link href="{{ asset('assets/frontend/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/frontend/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/frontend/vendor/aos/aos.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/frontend/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/frontend/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-
-  <!-- Main CSS -->
   <link href="{{ asset('assets/frontend/css/main.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/frontend/css/detail-buku.css') }}" rel="stylesheet">
 </head>
 
-<body class="index-page">
+<body>
 
-  {{-- Navbar --}}
-  @include('layouts.components-frontend.navbar')
+{{-- Navbar --}}
+@include('layouts.components-frontend.navbar')
 
-  {{-- DETAIL BUKU --}}
-  <main class="main" style="margin-top:100px; background:linear-gradient(180deg,#ffffff 70%,#ccebff 100%);">
-    <section class="py-4">
-      <div class="container">
-        <div class="row align-items-start g-5">
 
-          <!-- Cover -->
-          <div class="col-md-4">
-            <div class="p-3 rounded-4 text-center" style="background:#f8f9fa;">
-              <img src="{{ asset('images/buku/' . $buku->gambar) }}"
-                   class="img-fluid rounded-4"
-                   style="max-height:500px; object-fit:contain;"
-                   alt="{{ $buku->judul }}">
-            </div>
-          </div>
 
-          <!-- Info -->
-          <div class="col-md-8 d-flex flex-column justify-content-center">
-            <h2 class="fw-bold mb-2">{{ $buku->judul }}</h2>
+<!-- ================= CONTENT ================= -->
+<div class="container" style="margin-top:100px">
 
-            <div class="d-flex flex-wrap gap-2 mb-3">
-              <span class="badge rounded-pill bg-light text-dark border">✍️ {{ $buku->penulis ?? '-' }}</span>
-              <span class="badge rounded-pill bg-light text-dark border">🏢 {{ $buku->penerbit ?? '-' }}</span>
-              <span class="badge rounded-pill bg-light text-dark border">📅 {{ $buku->tahun_terbit ?? '-' }}</span>
-            </div>
+  <!-- DETAIL -->
+  <div class="book-detail">
 
-            <div class="p-3 rounded-4 mb-3" style="background:#f8fbff;">
-              <h6 class="fw-semibold mb-1">Deskripsi Buku</h6>
-              <p class="mb-0">{{ $buku->deskripsi ?? 'Belum ada deskripsi buku.' }}</p>
-            </div>
+    <!-- COVER -->
+    <div class="book-cover">
+      <div class="stock-badge">Tersedia: {{ $buku->stok }}</div>
+      <div class="cover-wrapper">
+        @if($buku->gambar)
+          <img src="{{ asset('images/buku/'.$buku->gambar) }}"
+               class="img-fluid rounded"
+               alt="{{ $buku->judul }}">
+        @else
+          <div class="placeholder-cover">📖</div>
+        @endif
+      </div>
+    </div>
 
-            {{-- PINJAM --}}
-            @auth
-            <form action="{{ route('peminjaman.store') }}" method="POST">
-              @csrf
-              <input type="hidden" name="buku_id" value="{{ $buku->id }}">
+    <!-- INFO -->
+    <div class="book-info">
+      <h1 class="book-title">{{ $buku->judul }}</h1>
 
-              <div class="mb-3">
-                <div class="d-flex align-items-center border rounded-pill bg-white" style="width:120px;">
-                  <button type="button" id="qtyMinus" class="btn btn-link px-2 text-dark">
-                    <i class="bi bi-dash"></i>
-                  </button>
-                  <input type="number" name="jumlah_buku" id="qtyInput"
-                         class="form-control border-0 text-center p-0"
-                         value="1" min="1" max="{{ $buku->stok }}">
-                  <button type="button" id="qtyPlus" class="btn btn-link px-2 text-dark">
-                    <i class="bi bi-plus"></i>
-                  </button>
-                </div>
-              </div>
+      <div class="book-meta">
+        <span class="meta-badge">✍️ {{ $buku->penulis ?? '-' }}</span>
+        <span class="meta-badge">🏢 {{ $buku->penerbit ?? '-' }}</span>
+        <span class="meta-badge">📅 {{ $buku->tahun_terbit ?? '-' }}</span>
+        <span class="meta-badge">📚 {{ $buku->kategori->nama ?? '-' }}</span>
+      </div>
 
-              <div class="d-flex gap-2">
-                <button class="btn btn-primary rounded-pill px-4">
-                  <i class="bi bi-book me-1"></i> Pinjam
-                </button>
-                <a href="{{ url()->previous() }}" class="btn btn-outline-secondary rounded-pill px-4">
-                  Kembali
-                </a>
-              </div>
-            </form>
-            @else
-              <a href="{{ route('login') }}" class="btn btn-primary rounded-pill px-4">
-                Login untuk Pinjam
-              </a>
-            @endauth
-          </div>
+      <div class="description-box">
+        <h3>Deskripsi Buku</h3>
+        <p>{{ $buku->deskripsi ?? 'Belum ada deskripsi buku.' }}</p>
+      </div>
+
+      {{-- JUMLAH --}}
+      <div class="borrow-section">
+        <div class="quantity-label">Jumlah Buku</div>
+        <div class="quantity-selector">
+          <button class="qty-btn" onclick="decreaseQty()">−</button>
+          <input type="number" id="qtyInput"
+                 class="qty-input"
+                 value="1"
+                 min="1"
+                 max="{{ $buku->stok }}"
+                 readonly>
+          <button class="qty-btn" onclick="increaseQty()">+</button>
         </div>
       </div>
-    </section>
 
-    {{-- REKOMENDASI --}}
-    <section class="py-5" style="background:#f8fbff;">
-      <div class="container">
-        <h4 class="fw-bold mb-4">📚 Rekomendasi Buku Lainnya</h4>
+      {{-- AKSI --}}
+      <div class="action-buttons">
+  @auth
+  <form id="addToCartForm"
+        action="{{ route('chart.pinjam.add', $buku) }}"
+        method="POST"
+        style="display:inline;">
+    @csrf
+    <input type="hidden" name="qty" id="qtyHidden" value="1">
+    <button type="submit" class="btn btn-primary">
+      🛒 Masukkan ke Keranjang
+    </button>
+  </form>
+  @else
+  <a href="{{ route('login') }}" class="btn btn-primary">
+    Login untuk Pinjam
+  </a>
+  @endauth
 
-        <div class="row g-4">
-          @forelse ($rekomendasi as $item)
-          <div class="col-lg-3 col-md-4 col-sm-6">
-            <div class="card h-100 border-0 shadow-sm rounded-4"
-                 style="transition:.3s"
-                 onmouseover="this.style.transform='translateY(-6px)'"
-                 onmouseout="this.style.transform='none'">
+  <a href="{{ url()->previous() }}" class="btn btn-secondary">
+    ← Kembali
+  </a>
+</div>
 
-              <div class="text-center p-3" style="background:#f8f9fa;">
-                <img src="{{ asset('images/buku/' . $item->gambar) }}"
-                     class="img-fluid"
-                     style="max-height:180px; object-fit:contain;">
-              </div>
+    </div>
+  </div>
 
-              <div class="card-body d-flex flex-column">
-                <h6 class="fw-semibold mb-1">{{ Str::limit($item->judul, 38) }}</h6>
-                <small class="text-muted mb-3">{{ $item->penulis }}</small>
+  <!-- ================= REKOMENDASI ================= -->
+  <div class="recommendations">
+    <h2 class="section-title">📚 Rekomendasi Buku Lainnya</h2>
 
-                <a href="{{ route('buku.detail', $item->id) }}"
-                   class="btn btn-outline-primary btn-sm rounded-pill mt-auto">
-                  Lihat Detail
-                </a>
-              </div>
-            </div>
-          </div>
-          @empty
-            <p class="text-muted">Belum ada rekomendasi buku.</p>
-          @endforelse
+    <div class="books-grid">
+      @forelse ($rekomendasi as $item)
+      <div class="book-card">
+        <div class="book-card-cover">
+          <img src="{{ asset('images/buku/'.$item->gambar) }}"
+               style="width:120px;height:180px;object-fit:contain;">
+        </div>
+        <div class="book-card-body">
+          <h3 class="book-card-title">
+            {{ Str::limit($item->judul, 8) }}
+          </h3>
+          <p class="book-card-author">{{ $item->penulis }}</p>
+          <a href="{{ route('buku.detail', $item->id) }}"
+             class="book-card-btn">
+            Lihat Detail
+          </a>
         </div>
       </div>
-    </section>
-  </main>
+      @empty
+        <p class="text-muted">Belum ada rekomendasi buku.</p>
+      @endforelse
+    </div>
+  </div>
+</div>
 
-  {{-- Footer --}}
-  @include('layouts.components-frontend.footer')
+{{-- Footer --}}
+@include('layouts.components-frontend.footer')
 
-  <!-- JS -->
-  <script src="{{ asset('assets/frontend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script>
-    const qtyInput = document.getElementById('qtyInput');
-    document.getElementById('qtyMinus').onclick = () => qtyInput.value > 1 ? qtyInput.value-- : null;
-    document.getElementById('qtyPlus').onclick = () => qtyInput.value < qtyInput.max ? qtyInput.value++ : null;
-  </script>
+<!-- ================= JS ================= -->
+<script>
+const qtyInput = document.getElementById('qtyInput');
+const qtyHidden = document.getElementById('qtyHidden');
 
-  @include('sweetalert::alert')
+function decreaseQty() {
+  if (qtyInput.value > 1) {
+    qtyInput.value--;
+    qtyHidden.value = qtyInput.value;
+  }
+}
+function increaseQty() {
+  if (qtyInput.value < qtyInput.max) {
+    qtyInput.value++;
+    qtyHidden.value = qtyInput.value;
+  }
+}
+</script>
+
+<script src="{{ asset('assets/frontend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+@include('sweetalert::alert')
 </body>
 </html>

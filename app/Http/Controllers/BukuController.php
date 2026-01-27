@@ -4,26 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\Kategori;
-
 use Illuminate\Http\Request;
 
 class BukuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $buku = Buku::latest()->paginate(12);
-        $kategori = Kategori::all();
-        return view('semua', compact('buku', 'kategori'));
+        $query = Buku::query();
+
+        // SEARCH JUDUL BUKU
+        if ($request->search) {
+            $query->where('judul', 'like', '%' . $request->search . '%');
+        }
+
+        // FILTER KATEGORI
+        $selectedCategory = null;
+        if ($request->kategori) {
+            $selectedCategory = Kategori::find($request->kategori);
+            $query->where('kategori_id', $request->kategori);
+        }
+
+        $buku = $query->latest()->paginate(12)->withQueryString();
+        $kategori = Kategori::withCount('bukus')->get();
+
+        return view('semua', compact('buku', 'kategori', 'selectedCategory'));
     }
 
     public function filter($id)
     {
-        $kategori = Kategori::all();
-        $selectedCategory = Kategori::findOrFail($id);
-        $buku = Buku::where('kategori_id', $id)->paginate(12);
-
-        // Kirim data ke view
-        return view('semua', compact('buku', 'kategori', 'selectedCategory'));
+        return redirect()->route('buku.index', ['kategori' => $id]);
     }
 
     public function detail($id)
@@ -48,6 +57,4 @@ class BukuController extends Controller
         $kategori = Kategori::all();
         return view('semua', compact('buku', 'kategori'))->with('filter', 'semua');
     }
-
 }
- 

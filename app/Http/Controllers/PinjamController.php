@@ -40,12 +40,7 @@ class PinjamController extends Controller
 
     public function riwayat()
     {
-        // Ambil data peminjaman berdasarkan user login
-        $riwayat = Peminjaman::with('buku')
-                    ->where('user_id', auth()->id())
-                    ->orderBy('tgl_pinjam', 'desc')
-                    ->get();
-
+        $riwayat = Peminjaman::with('buku')->where('user_id', auth()->id())->latest()->get();
         return view('riwayat', compact('riwayat'));
     }
     

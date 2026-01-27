@@ -4,87 +4,94 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
   <title>
     @if(isset($selectedCategory))
-        Buku Kategori {{ $selectedCategory->nama }} - e-Perpus
+      Buku Kategori {{ $selectedCategory->nama }} - e-Perpus
     @else
-        Semua Buku - e-Perpus
+      Perpustakaan Digital - e-Perpus
     @endif
-   </title>
+  </title>
 
-  <!-- Favicons -->
-  <link rel="shortcut icon" type="image/png" href="{{ asset('assets/backend/images/logos/logo-mini.png') }}" />
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/png"
+        href="{{ asset('assets/backend/images/logos/logo-mini.png') }}" />
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
   <!-- Vendor CSS -->
   <link href="{{ asset('assets/frontend/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/frontend/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/frontend/vendor/aos/aos.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/frontend/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-  <link href="{{ asset('assets/frontend/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-
-  <!-- Main CSS -->
   <link href="{{ asset('assets/frontend/css/main.css') }}" rel="stylesheet">
 
   <style>
-    /* agar konten tidak naik ke navbar */
     body.index-page {
-        padding-top: 100px;
+      padding-top: 100px;
+      background-color: #f5f6fa;
+    }
+
+    /* Section Header */
+    .page-header {
+      background: #fff;
+      padding: 20px 25px;
+      border-radius: 14px;
+      margin-bottom: 25px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.05);
     }
 
     /* Sidebar */
     .sidebar {
-    padding: 15px;
-    background: #f9f9f9;
-    border-radius: 10px;
-    margin-top: 80px; /* atur jaraknya di sini */
+      background: #fff;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.05);
     }
 
-    /* Gambar Buku */
-    .book-img {
-        width: 100%;
-        height: 250px;
-        object-fit: cover;
-        border-radius: 10px;
-        transition: transform 0.3s;
+    .sidebar h5 {
+      font-weight: 600;
+      margin-bottom: 15px;
     }
 
-    .book-img:hover {
-        transform: scale(1.05);
+    /* Sidebar link */
+    .sidebar a {
+      text-decoration: none;
+      color: #333;
     }
 
-    .book-img-popular {
-        width: 100%;
-        height: 380px;
-        object-fit: cover;
-        border-radius: 10px;
-        transition: transform 0.3s;
+    .sidebar a:hover {
+      color: #0d6efd;
     }
 
-    .book-img-popular:hover {
-        transform: scale(1.05);
+    /* Hover Zoom Buku */
+    .hover-zoom {
+      overflow: hidden;
+      transition: transform .3s ease, box-shadow .3s ease;
     }
 
-    /* Grid Buku */
-    .grid__responsive {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
+    .hover-zoom:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0,0,0,.15);
     }
 
-    /* Qty Input */
-    #qtyInput::-webkit-outer-spin-button,
-    #qtyInput::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
+    .hover-zoom img {
+      transition: transform .35s ease;
     }
 
-    #qtyInput {
-        -moz-appearance: textfield;
+    .hover-zoom:hover img {
+      transform: scale(1.08);
+    }
+
+    /* Card Buku */
+    .book-card {
+      background: #fff;
+    }
+
+    /* Pagination */
+    .pagination {
+      justify-content: center;
     }
   </style>
 </head>
@@ -94,88 +101,96 @@
   {{-- Navbar --}}
   @include('layouts.components-frontend.navbar')
 
-  <div class="shop sp_top_80">
-      <div class="container">
-          <div class="row">
+  <div class="container mt-4">
+    <div class="row">
 
-              <!-- Sidebar Kategori Buku -->
-              <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12 col-12">
-                  <div class="sidebar sidebar-collapse-hide">
-                      <div class="sidebar__widget widget-collapse-show">
-                          <div class="sidebar__title">
-                              <h4>Kategori Buku</h4>
-                              <i class="fa fa-angle-down"></i>
-                          </div>
+      <!-- SIDEBAR -->
+      <div class="col-lg-3 col-md-4 mb-4">
+        <div class="sidebar">
+          <h5><i class="bi bi-journal-bookmark me-2"></i>Kategori Buku</h5>
 
-                          <div class="sidebar__menu">
-                              <ul>
-                                  <li>
-                                      <a href="{{ route('buku.index') }}"
-                                      class="{{ !isset($selectedCategory) ? 'fw-bold text-primary' : '' }}">
-                                          Semua Buku
-                                      </a>
-                                  </li>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item border-0 px-0">
+              <a href="{{ route('buku.index') }}"
+                 class="d-flex justify-content-between {{ !isset($selectedCategory) ? 'fw-bold text-primary' : '' }}">
+                Semua Buku
+                <span class="badge bg-primary">{{ $buku->total() }}</span>
+              </a>
+            </li>
 
-                                  @foreach ($kategori as $cat)
-                                      <li>
-                                          <a href="{{ route('buku.filter', $cat->id) }}"
-                                          class="{{ isset($selectedCategory) && $selectedCategory->id == $cat->id ? 'fw-bold text-primary' : '' }}">
-                                              {{ $cat->nama }}
-                                              <span>({{ $cat->bukus->count() }})</span>
-                                          </a>
-                                      </li>
-                                  @endforeach
-                              </ul>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Daftar Buku -->
-            <div class="col-xl-9 col-lg-9 col-md-8 col-sm-12 col-12">
-                <div class="tab-content mt-5">
-                    <div class="tab-pane fade active show" id="books__one" role="tabpanel">
-                        <div class="row g-4 justify-content-start">
-                            @if ($buku->isEmpty())
-                                <p class="text-muted">Tidak ada buku.</p>
-                            @else
-                                @foreach ($buku as $data)
-                                    <div class="col-md-4 d-flex justify-content-center">
-                                        <div class="card shadow-sm border-0 rounded-4 overflow-hidden" style="width: 100%; max-width: 250px; height: 380px;">
-                                            <a href="{{ route('buku.detail', $data->id) }}" class="text-decoration-none d-block h-100">
-                                                <img src="{{ asset('images/buku/' . $data->gambar) }}"
-                                                    alt="{{ $data->judul }}"
-                                                    style="width:100%; height:100%; object-fit:cover;">
-                                            </a>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                  <!-- Pagination -->
-                  <div class="mt-4">
-                      {{ $buku->links() }}
-                  </div>
-              </div>
-
-          </div>
+            @foreach ($kategori as $cat)
+              <li class="list-group-item border-0 px-0">
+                <a href="{{ route('buku.filter', $cat->id) }}"
+                   class="d-flex justify-content-between {{ isset($selectedCategory) && $selectedCategory->id == $cat->id ? 'fw-bold text-primary' : '' }}">
+                  {{ $cat->nama }}
+                  <span class="badge bg-light text-dark">{{ $cat->bukus_count }}</span>
+                </a>
+              </li>
+            @endforeach
+          </ul>
+        </div>
       </div>
+
+      <!-- CONTENT -->
+      <div class="col-lg-9 col-md-8">
+
+        <!-- HEADER + SEARCH -->
+        <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3">
+          <h4 class="mb-0">
+            @if(isset($selectedCategory))
+              Kategori: {{ $selectedCategory->nama }}
+            @else
+              Koleksi Buku Perpustakaan
+            @endif
+          </h4>
+
+          <form action="{{ route('buku.index') }}" method="GET" class="d-flex">
+            <input type="text"
+                   name="search"
+                   class="form-control me-2"
+                   placeholder="Cari judul buku..."
+                   value="{{ request('search') }}">
+            <button class="btn btn-primary">
+              <i class="bi bi-search"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- GRID BUKU -->
+        <div class="row g-4">
+          @forelse ($buku as $data)
+            <div class="col-lg-4 col-md-6 d-flex justify-content-center">
+              <div class="card book-card border-0 rounded-4 hover-zoom"
+                   style="width:100%; max-width:260px; height:380px;">
+                <a href="{{ route('buku.detail', $data->id) }}" class="d-block h-100">
+                  <img src="{{ asset('images/buku/'.$data->gambar) }}"
+                       alt="{{ $data->judul }}"
+                       class="img-fluid w-100 h-100 object-fit-cover rounded-4">
+                </a>
+              </div>
+            </div>
+          @empty
+            <p class="text-muted text-center">Buku tidak ditemukan.</p>
+          @endforelse
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="mt-4">
+          {{ $buku->withQueryString()->links() }}
+        </div>
+
+      </div>
+    </div>
   </div>
 
   {{-- Footer --}}
   @include('layouts.components-frontend.footer')
 
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center">
-      <i class="bi bi-arrow-up-short"></i>
+    <i class="bi bi-arrow-up-short"></i>
   </a>
 
-  <!-- Vendor JS -->
   <script src="{{ asset('assets/frontend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ asset('assets/frontend/vendor/aos/aos.js') }}"></script>
-  <script src="{{ asset('assets/frontend/vendor/glightbox/js/glightbox.min.js') }}"></script>
-  <script src="{{ asset('assets/frontend/vendor/swiper/swiper-bundle.min.js') }}"></script>
   <script src="{{ asset('assets/frontend/js/main.js') }}"></script>
 
 </body>

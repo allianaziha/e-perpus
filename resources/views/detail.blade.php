@@ -92,7 +92,7 @@
         style="display:inline;">
     @csrf
     <input type="hidden" name="qty" id="qtyHidden" value="1">
-    <button type="submit" class="btn btn-primary">
+    <button type="button" class="btn btn-primary" onclick="addToCart(event)">
       🛒 Masukkan ke Keranjang
     </button>
   </form>
@@ -159,9 +159,51 @@ function increaseQty() {
     qtyHidden.value = qtyInput.value;
   }
 }
+
+function addToCart(event) {
+  event.preventDefault();
+  
+  const form = document.getElementById('addToCartForm');
+  const formData = new FormData(form);
+  
+  fetch(form.action, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      Swal.fire({
+        title: 'Berhasil!',
+        text: 'Buku telah dimasukkan ke keranjang',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+      });
+    } else {
+      Swal.fire({
+        title: 'Gagal!',
+        text: data.message || 'Terjadi kesalahan',
+        icon: 'error'
+      });
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    Swal.fire({
+      title: 'Error!',
+      text: 'Terjadi kesalahan saat menambahkan ke keranjang',
+      icon: 'error'
+    });
+  });
+}
 </script>
 
 <script src="{{ asset('assets/frontend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @include('sweetalert::alert')
 </body>
 </html>

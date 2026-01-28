@@ -18,11 +18,13 @@ use App\Http\Controllers\Petugas\PengembalianController as PetugasPengembalianCo
 use App\Http\Controllers\Petugas\DendaController as PetugasDendaController;
 use App\Http\Controllers\Petugas\DashboardController as PetugasDashboardController;
 use App\Http\Controllers\Petugas\UserController as PetugasUserController;
+use App\Http\Controllers\Petugas\BannerController as PetugasBannerController;
+use App\Http\Controllers\User\BukuController as UserBukuController;
 use App\Http\Controllers\BukuController;
-use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\PinjamController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ChartPinjamController;
+use App\Http\Controllers\BerandaController;
 
 
 Auth::routes();
@@ -56,9 +58,20 @@ Route::prefix('petugas')->name('petugas.')->group(function () {
     Route::resource('pengembalian', PetugasPengembalianController::class);
     Route::resource('denda', PetugasDendaController::class);  
     Route::resource('user', PetugasUserController::class);
+    Route::resource('banner', PetugasBannerController::class);
+});
+
+Route::middleware('auth')->name('user.')->group(function() {
+    Route::get('user-buku', [UserBukuController::class, 'index'])->name('buku.index');
+    Route::get('user-buku/{buku}', [UserBukuController::class, 'show'])->name('buku.show');
 });
 
 // routes/web.php
+Route::middleware('auth')->name('user.')->group(function() {
+    Route::get('user-buku', [UserBukuController::class, 'index'])->name('buku.index');
+    Route::get('user-buku/{buku}', [UserBukuController::class, 'show'])->name('buku.show');
+});
+
 Route::middleware(['auth','role:admin,petugas'])->group(function() {
     Route::get('/peminjaman/notifikasi', [PeminjamanController::class, 'notifikasi'])
         ->name('peminjaman.notifikasi');
@@ -89,7 +102,7 @@ Route::post('/profile/update', [ProfileController::class, 'update'])
     ->name('profile.update');
 
 Route::post('/profile/delete-avatar', [ProfileController::class, 'deleteAvatar'])
-    ->name('profile.deleteAvatar');
+    ->name('profile.avatar.delete');
 
 // ChartPinjam
 Route::prefix('chart-pinjam')->middleware('auth')->group(function () {

@@ -26,74 +26,8 @@
   <link href="{{ asset('assets/frontend/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/frontend/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/frontend/css/main.css') }}" rel="stylesheet">
-
-  <style>
-    body.index-page {
-      padding-top: 100px;
-      background-color: #f5f6fa;
-    }
-
-    /* Section Header */
-    .page-header {
-      background: #fff;
-      padding: 20px 25px;
-      border-radius: 14px;
-      margin-bottom: 25px;
-      box-shadow: 0 6px 20px rgba(0,0,0,.05);
-    }
-
-    /* Sidebar */
-    .sidebar {
-      background: #fff;
-      padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 6px 20px rgba(0,0,0,.05);
-    }
-
-    .sidebar h5 {
-      font-weight: 600;
-      margin-bottom: 15px;
-    }
-
-    /* Sidebar link */
-    .sidebar a {
-      text-decoration: none;
-      color: #333;
-    }
-
-    .sidebar a:hover {
-      color: #0d6efd;
-    }
-
-    /* Hover Zoom Buku */
-    .hover-zoom {
-      overflow: hidden;
-      transition: transform .3s ease, box-shadow .3s ease;
-    }
-
-    .hover-zoom:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 30px rgba(0,0,0,.15);
-    }
-
-    .hover-zoom img {
-      transition: transform .35s ease;
-    }
-
-    .hover-zoom:hover img {
-      transform: scale(1.08);
-    }
-
-    /* Card Buku */
-    .book-card {
-      background: #fff;
-    }
-
-    /* Pagination */
-    .pagination {
-      justify-content: center;
-    }
-  </style>
+  <link href="{{ asset('assets/frontend/css/buku.css') }}" rel="stylesheet">
+  
 </head>
 
 <body class="index-page">

@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Petugas;
 
 use App\Http\Controllers\Controller;
 use App\Models\Buku;
+use App\Models\Rak;
 use App\Models\Peminjaman;
 use App\Models\Pengembalian;
 use App\Models\Denda;
+use App\Models\User;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -15,9 +17,11 @@ class DashboardController extends Controller
     {
         // Statistik atas
         $totalBuku = Buku::count();
+        $totalRak = Rak::count();
         $totalDipinjam = Peminjaman::where('status', 'dipinjam')->count();
         $totalPengembalian = Pengembalian::count();
         $totalDenda = Denda::sum('nominal');
+        $totalUser = User::where('role', 'user')->count();
 
         // Grafik mingguan
         $now = Carbon::now();
@@ -53,9 +57,11 @@ class DashboardController extends Controller
 
         return view('petugas.dashboard', compact(
             'totalBuku',
+            'totalRak',
             'totalDipinjam',
             'totalPengembalian',
             'totalDenda',
+            'totalUser',
             'mingguLabels',
             'peminjamanMingguan',
             'pengembalianMingguan',

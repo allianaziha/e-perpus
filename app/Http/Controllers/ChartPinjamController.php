@@ -28,6 +28,9 @@ class ChartPinjamController extends Controller
     public function add(Request $request, $bukuId)
     {
         if (!Auth::check()) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Silakan login terlebih dahulu.'], 401);
+            }
             toast('Silakan login terlebih dahulu.', 'error');
             return redirect('/login');
         }
@@ -35,6 +38,15 @@ class ChartPinjamController extends Controller
         $request->validate([
             'qty' => 'required|integer|min:1',
         ]);
+
+        $buku = Buku::findOrFail($bukuId);
+
+        if ($buku->stok < $request->qty) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Stok buku tidak mencukupi.'], 422);
+            }
+            return back()->with('error', 'Stok buku tidak mencukupi.');
+        }
 
         $chart = ChartPinjam::where('user_id', Auth::id())
             ->where('buku_id', $bukuId)
@@ -48,6 +60,10 @@ class ChartPinjamController extends Controller
                 'buku_id' => $bukuId,
                 'qty'     => $request->qty,
             ]);
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Buku berhasil ditambahkan ke keranjang peminjaman.']);
         }
 
         toast('Buku berhasil ditambahkan ke keranjang peminjaman.', 'success');

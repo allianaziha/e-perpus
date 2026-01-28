@@ -26,7 +26,8 @@
   <!-- Main CSS -->
   <link href="{{ asset('assets/frontend/css/main.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/frontend/css/detail-buku.css') }}" rel="stylesheet">
-
+  <link href="{{ asset('assets/frontend/css/cart.css') }}" rel="stylesheet">
+  
 </head>
 
 <body>
@@ -37,95 +38,105 @@
   <main class="main">
 
 <!-- cart__section__start -->
-<div class="container mt-5">
+<div class="container">
     <div class="row">
         <div class="col-12">
-            <h2 class="mb-4">Keranjang Peminjaman</h2>
+            <div class="cart-header">
+                <h2><i class="bi bi-cart3"></i> Keranjang Peminjaman</h2>
+            </div>
 
             @if($chartPinjam->isEmpty())
-                <div class="alert alert-info text-center">
-                    <h4>Keranjang peminjaman masih kosong</h4>
-                    <p>Silakan tambahkan buku ke keranjang untuk memulai peminjaman.</p>
-                    <a href="{{ route('buku.index') }}" class="btn btn-primary">Cari Buku</a>
+                <div class="empty-cart">
+                    <h4>📚 Keranjang Peminjaman Kosong</h4>
+                    <p>Silakan tambahkan buku ke keranjang untuk memulai peminjaman Anda.</p>
+                    <a href="{{ route('buku.index') }}" class="btn btn-primary">
+                        <i class="bi bi-search"></i> Cari Buku
+                    </a>
                 </div>
             @else
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Cover</th>
-                                <th>Judul Buku</th>
-                                <th>Stok Tersedia</th>
-                                <th>Jumlah Pinjam</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($chartPinjam as $item)
-                            <tr>
-                                <td>
-                                    @if($item->buku && $item->buku->gambar)
-                                        <img src="{{ asset('images/buku/'.$item->buku->gambar) }}"
-                                             alt="{{ $item->buku->judul }}"
-                                             class="img-thumbnail"
-                                             style="width: 60px; height: 80px; object-fit: cover;">
-                                    @else
-                                        <div class="bg-light d-flex align-items-center justify-content-center"
-                                             style="width: 60px; height: 80px;">
-                                            📖
-                                        </div>
-                                    @endif
-                                </td>
-                                <td>
-                                    <strong>{{ $item->buku->judul ?? 'Buku tidak ditemukan' }}</strong><br>
-                                    <small class="text-muted">{{ $item->buku->penulis ?? '-' }}</small>
-                                </td>
-                                <td>{{ $item->buku->stok ?? 0 }} buku</td>
-                                <td>
-                                    <form action="{{ route('chart.pinjam.update', $item->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="input-group input-group-sm" style="width: 120px;">
-                                            <input type="number"
-                                                   name="qty"
-                                                   value="{{ $item->qty }}"
-                                                   class="form-control"
-                                                   min="1"
-                                                   max="{{ $item->buku->stok ?? 1 }}">
-                                            <button type="submit" class="btn btn-outline-secondary">Update</button>
-                                        </div>
-                                    </form>
-                                </td>
-                                <td>
-                                    <form action="{{ route('chart.pinjam.remove', $item->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                                class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Hapus buku ini dari keranjang?')">
-                                            <i class="fa fa-trash"></i> Hapus
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 80px;">Cover</th>
+                                    <th>Judul Buku</th>
+                                    <th style="width: 130px;">Stok Tersedia</th>
+                                    <th style="width: 180px;">Jumlah Pinjam</th>
+                                    <th style="width: 100px;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($chartPinjam as $item)
+                                <tr>
+                                    <td class="book-cover">
+                                        @if($item->buku && $item->buku->gambar)
+                                            <img src="{{ asset('images/buku/'.$item->buku->gambar) }}"
+                                                 alt="{{ $item->buku->judul }}">
+                                        @else
+                                            <div class="book-placeholder">📖</div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="book-title">{{ $item->buku->judul ?? 'Buku tidak ditemukan' }}</div>
+                                        <div class="book-author">{{ $item->buku->penulis ?? '-' }}</div>
+                                    </td>
+                                    <td>
+                                        <span class="stock-badge">{{ $item->buku->stok ?? 0 }} buku</span>
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('chart.pinjam.update', $item->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="input-group input-group-sm" style="width: 130px;">
+                                                <input type="number"
+                                                       name="qty"
+                                                       value="{{ $item->qty }}"
+                                                       min="1"
+                                                       max="{{ $item->buku->stok ?? 1 }}">
+                                                <button type="submit" class="btn">Update</button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('chart.pinjam.remove', $item->id) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-delete"
+                                                    onclick="return confirm('Hapus buku ini dari keranjang?')">
+                                                <i class="bi bi-trash"></i> Hapus
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <div class="row mt-4">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5>Ringkasan Peminjaman</h5>
-                                <p><strong>Total Buku:</strong> {{ $chartPinjam->sum('qty') }} buku</p>
-                                <p><strong>Jumlah Item:</strong> {{ $chartPinjam->count() }} jenis buku</p>
-                            </div>
+                <div class="summary-section">
+                    <div class="summary-card">
+                        <h5><i class="bi bi-info-circle"></i> Ringkasan Peminjaman</h5>
+                        <div class="summary-item">
+                            <span class="summary-label">Total Buku</span>
+                            <span class="summary-value">{{ $chartPinjam->sum('qty') }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Jumlah Item</span>
+                            <span class="summary-value">{{ $chartPinjam->count() }}</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Status</span>
+                            <span class="status-badge"><i class="bi bi-check-circle"></i> Siap Diproses</span>
                         </div>
                     </div>
-                    <div class="col-md-6 text-end">
-                        <a href="{{ route('chart.pinjam.checkout') }}" class="btn btn-success btn-lg">
-                            <i class="fa fa-check"></i> Proses Peminjaman
+                    <div class="summary-card">
+                        <h5><i class="bi bi-check-circle"></i> Lanjutkan Peminjaman</h5>
+                        <p class="checkout-info">Periksa kembali daftar buku Anda sebelum memproses peminjaman. Pastikan semua item sudah benar.</p>
+                        <a href="{{ route('chart.pinjam.checkout') }}" class="checkout-btn">
+                            <i class="bi bi-check-lg"></i> Proses Peminjaman
                         </a>
                     </div>
                 </div>

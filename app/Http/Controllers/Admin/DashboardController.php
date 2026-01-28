@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $totalDipinjam = Peminjaman::where('status', 'dipinjam')->count();
         $totalDenda = Denda::sum('nominal');
         $totalPengembalian = Pengembalian::count();
-        $totalUser = User::count();
+        $totalUser = User::where('role', 'user')->count();
 
         // Ambil bulan sekarang
         $now = Carbon::now();

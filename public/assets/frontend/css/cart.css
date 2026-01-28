@@ -1,0 +1,310 @@
+
+    body {
+      background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+      padding-top: 100px;
+      min-height: 100vh;
+    }
+
+    .main {
+      padding: 2rem 0;
+    }
+
+    /* Page Header */
+    .cart-header {
+      margin-bottom: 2rem;
+    }
+
+    .cart-header h2 {
+      color: #1565c0;
+      font-weight: 700;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0;
+    }
+
+    /* Empty State */
+    .empty-cart {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+      border: 2px solid #bbdefb;
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(25, 118, 210, 0.08);
+    }
+
+    .empty-cart h4 {
+      color: #1565c0;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .empty-cart p {
+      color: #546e7a;
+      margin-bottom: 1.5rem;
+      font-size: 1.025rem;
+    }
+
+    .empty-cart .btn-primary {
+      background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    /* Table Container */
+    .table-container {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(25, 118, 210, 0.08);
+      margin-bottom: 2rem;
+    }
+
+    .table {
+      margin-bottom: 0;
+    }
+
+    .table thead {
+      background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
+      color: white;
+    }
+
+    .table thead th {
+      border: none;
+      font-weight: 600;
+      padding: 1rem;
+      vertical-align: middle;
+    }
+
+    .table tbody tr {
+      border-bottom: 1px solid #e3f2fd;
+      transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+      background-color: #f5f9ff;
+    }
+
+    .table tbody td {
+      padding: 1rem;
+      vertical-align: middle;
+      color: #546e7a;
+    }
+
+    /* Book Cover */
+    .book-cover img {
+      border-radius: 8px;
+      border: 2px solid #e3f2fd;
+      transition: all 0.3s ease;
+      max-width: 60px;
+      height: auto;
+    }
+
+    .book-cover img:hover {
+      transform: scale(1.05);
+      border-color: #42a5f5;
+    }
+
+    .book-placeholder {
+      width: 60px;
+      height: 80px;
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    /* Book Info */
+    .book-title {
+      color: #1565c0;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .book-author {
+      color: #90a4ae;
+      font-size: 0.9rem;
+    }
+
+    /* Stock Badge */
+    .stock-badge {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      color: #1565c0;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-block;
+    }
+
+    /* Quantity Input */
+    .input-group-sm input {
+      border: 2px solid #e3f2fd;
+      color: #1565c0;
+      font-weight: 600;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .input-group-sm input:focus {
+      border-color: #42a5f5;
+      box-shadow: 0 0 0 0.2rem rgba(66, 165, 245, 0.25);
+    }
+
+    .input-group-sm .btn {
+      background: #f5f5f5;
+      border: 2px solid #e3f2fd;
+      color: #1976d2;
+      font-weight: 600;
+      border-radius: 0 8px 8px 0;
+      transition: all 0.3s ease;
+    }
+
+    .input-group-sm .btn:hover {
+      background: #e3f2fd;
+      border-color: #42a5f5;
+      color: #1976d2;
+    }
+
+    /* Delete Button */
+    .btn-delete {
+      background: #ffebee;
+      border: none;
+      color: #f44336;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .btn-delete:hover {
+      background: #f44336;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* Summary Section */
+    .summary-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .summary-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+      border: 2px solid #bbdefb;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 8px 25px rgba(25, 118, 210, 0.08);
+    }
+
+    .summary-card h5 {
+      color: #1565c0;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      font-size: 1.125rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e3f2fd;
+    }
+
+    .summary-item:last-child {
+      border-bottom: none;
+    }
+
+    .summary-label {
+      color: #546e7a;
+      font-weight: 600;
+    }
+
+    .summary-value {
+      color: #1565c0;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+
+    .status-badge {
+      background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+      color: #1b5e20;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Checkout Button */
+    .checkout-btn {
+      background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 1rem 2rem;
+      font-weight: 700;
+      font-size: 1.125rem;
+      width: 100%;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .checkout-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+      color: white;
+      text-decoration: none;
+    }
+
+    /* Info Text */
+   .checkout-info {
+      color: #546e7a;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .cart-header h2 {
+        font-size: 1.5rem;
+      }
+
+      .summary-section {
+        grid-template-columns: 1fr;
+      }
+
+      .table {
+        font-size: 0.9rem;
+      }
+
+      .input-group-sm {
+        width: 100% !important;
+      }
+
+      .btn-delete {
+        display: block;
+        width: 100%;
+        margin-top: 0.5rem;
+      }
+    }
+ 

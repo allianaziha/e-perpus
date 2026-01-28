@@ -19,7 +19,12 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" href="{{ route('buku.index') }}">
+              <a class="dropdown-item" href="{{ url('/') }}#highlight-books">
+                Buku
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{{ route('buku.semua') }}">
                 Semua Buku
               </a>
             </li>
@@ -50,11 +55,43 @@
       </button>
       @endauth
 
-      {{-- LOGIN / DASHBOARD --}}
+      {{-- LOGIN / DASHBOARD / LOGOUT --}}
       @guest
         <a class="btn-getstarted" href="{{ route('login') }}">Login</a>
       @else
-        <a class="btn-getstarted" href="">Dashboard</a>
+        <div class="dropdown">
+              <button class="btn-getstarted rounded-circle p-0 border-0 position-relative"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style="transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <i class="bi bi-person-circle fs-4 text-primary"></i>
+              </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-3" style="border: none; min-width: 180px;">
+            @if(auth()->user()->role == 'admin')
+              <li><a class="dropdown-item py-2 px-3" href="{{ route('admin.dashboard') }}" style="transition: all 0.2s ease;">
+                <i class="bi bi-speedometer2 me-2 text-primary"></i><strong>Dashboard</strong>
+              </a></li>
+            @elseif(auth()->user()->role == 'petugas')
+              <li><a class="dropdown-item py-2 px-3" href="{{ route('petugas.dashboard') }}" style="transition: all 0.2s ease;">
+                <i class="bi bi-speedometer2 me-2 text-primary"></i><strong>Dashboard</strong>
+              </a></li>
+            @elseif(auth()->user()->role == 'user')
+              <li><a class="dropdown-item py-2 px-3" href="{{ route('user.buku.index') }}" style="transition: all 0.2s ease;">
+                <i class="bi bi-book me-2 text-primary"></i><strong>Dashboard</strong>
+              </a></li>
+            @endif
+            <li><hr class="dropdown-divider my-1"></li>
+            <li>
+              <form action="{{ route('logout') }}" method="POST" class="d-inline w-100">
+                @csrf
+                <button type="submit" class="dropdown-item py-2 px-3 text-danger w-100 text-start" style="transition: all 0.2s ease;">
+                  <i class="bi bi-box-arrow-right me-2"></i>Logout
+                </button>
+              </form>
+            </li>
+          </ul>
+        </div>
       @endguest
     </div>
 

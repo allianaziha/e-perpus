@@ -1,0 +1,105 @@
+@extends('layouts.backend')
+
+@section('title', 'Admin Perpus - Banner')
+
+@section('styles')
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.css">
+<style>
+    #dataBanner th, #dataBanner td {
+        vertical-align: middle;
+    }
+    .card {
+        transition: all 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
+    }
+</style>
+@endsection
+
+@section('content')
+<div class="container-fluid">
+    {{-- Judul Besar --}}
+    <h3 class="mb-3 fw-bold text-uppercase">BANNER</h3>
+
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Data Banner</h5>
+                    <a href="{{ route('petugas.banner.create') }}" class="btn btn-primary btn-sm">
+                        <i class="ti ti-plus"></i> Tambah
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered align-middle mb-0" id="dataBanner">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th class="text-center" style="width: 5%">No</th>
+                                    <th class="text-center">Judul Utama</th>
+                                    <th class="text-center">Judul Tebal</th>
+                                    <th class="text-center">Deskripsi</th>
+                                    <th class="text-center">Gambar</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center" style="width: 18%">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($banner as $index => $data)
+                                <tr>
+                                    <td class="text-center">{{ $index + 1 }}</td>
+                                    <td class="text-center">{{ $data->judul_utama }}</td>
+                                    <td class="text-center">{{ $data->judul}}</td>
+                                    <td>{{ Str::limit($data->deskripsi, 50, '...') }}</td>
+                                    <td class="text-center">
+                                        @if($data->gambar)
+                                            <img src="{{ asset('images/banner/'.$data->gambar) }}" 
+                                                 alt="{{ $data->judul_utama }}" 
+                                                 style="width: 70px; height: 70px; object-fit: cover;"
+                                                 class="rounded shadow-sm">
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if($data->status == 'aktif')
+                                            <span class="badge bg-success">Aktif</span>
+                                        @else
+                                            <span class="badge bg-secondary">Nonaktif</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <a href="{{ route('petugas.banner.edit', ['banner' => $data->id]) }}" class="btn btn-warning btn-sm" title="Edit">
+                                                <i class="ti ti-pencil"></i>
+                                            </a>
+                                            <form action="{{ route('petugas.banner.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus banner ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                                    <i class="ti ti-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.js"></script>
+<script>
+    new DataTable('#dataBanner');
+</script>
+@endpush

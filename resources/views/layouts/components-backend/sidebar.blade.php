@@ -123,6 +123,28 @@
               <span class="hide-menu">Denda</span>
             </a>
           </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('petugas.banner.index') }}">
+              <i class="ti ti-photo"></i>
+              <span class="hide-menu">Banner</span>
+            </a>
+          </li>
+        @endif
+
+        {{-- Menu untuk User --}}
+        @if(Auth::user()->role == 'user')
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('user.buku.index') }}">
+              <i class="ti ti-book-2"></i>
+              <span class="hide-menu">Daftar Buku</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('chart.pinjam.index') }}">
+              <i class="ti ti-shopping-cart"></i>
+              <span class="hide-menu">Keranjang Pinjam</span>
+            </a>
+          </li>
         @endif
 
         <li class="nav-small-cap mt-3">

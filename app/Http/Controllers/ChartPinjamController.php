@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ChartPinjam;
 use App\Models\Buku;
+use App\Models\Peminjaman;
 use Auth;
 use Alerts;
 
@@ -131,6 +132,16 @@ class ChartPinjamController extends Controller
             $buku = Buku::find($item->buku_id);
             $buku->stok -= $item->qty;
             $buku->save();
+
+            // Buat record peminjaman untuk setiap item
+            Peminjaman::create([
+                'buku_id' => $item->buku_id,
+                'user_id' => auth()->id(),
+                'jumlah_buku' => $item->qty,
+                'tgl_pinjam' => now(),
+                'tgl_jatuh_tempo' => now()->addDays(7),
+                'status' => 'pending',
+            ]);
         }
 
         // kosongkan keranjang

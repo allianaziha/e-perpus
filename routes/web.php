@@ -113,3 +113,7 @@ Route::prefix('chart-pinjam')->middleware('auth')->group(function () {
     Route::get('/checkout', [ChartPinjamController::class, 'checkout'])->name('chart.pinjam.checkout');
 });
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

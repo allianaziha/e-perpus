@@ -19,17 +19,14 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" href="{{ url('/') }}#highlight-books">
-                Buku
-              </a>
+              <a class="dropdown-item" href="{{ url('/') }}#highlight-books">Buku</a>
             </li>
             <li>
-              <a class="dropdown-item" href="{{ route('buku.semua') }}">
-                Semua Buku
-              </a>
+              <a class="dropdown-item" href="{{ route('buku.semua') }}">Semua Buku</a>
             </li>
           </ul>
         </li>
+
         <li><a href="{{ url('/') }}#contact">Kontak</a></li>
       </ul>
     </nav>
@@ -55,50 +52,81 @@
       </button>
       @endauth
 
-      {{-- LOGIN / DASHBOARD / LOGOUT --}}
+      {{-- LOGIN / PROFILE --}}
       @guest
         <a class="btn-getstarted" href="{{ route('login') }}">Login</a>
       @else
         <div class="dropdown">
-              <button class="btn-getstarted rounded-circle p-0 border-0 position-relative"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style="transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <i class="bi bi-person-circle fs-4 text-primary"></i>
-              </button>
-          <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-3" style="border: none; min-width: 180px;">
-            @if(auth()->user()->role == 'admin')
-              <li><a class="dropdown-item py-2 px-3" href="{{ route('admin.dashboard') }}" style="transition: all 0.2s ease;">
-                <i class="bi bi-speedometer2 me-2 text-primary"></i><strong>Dashboard</strong>
-              </a></li>
-            @elseif(auth()->user()->role == 'petugas')
-              <li><a class="dropdown-item py-2 px-3" href="{{ route('petugas.dashboard') }}" style="transition: all 0.2s ease;">
-                <i class="bi bi-speedometer2 me-2 text-primary"></i><strong>Dashboard</strong>
-              </a></li>
-            @elseif(auth()->user()->role == 'user')
-              <li><a class="dropdown-item py-2 px-3" href="{{ route('user.buku.index') }}" style="transition: all 0.2s ease;">
-                <i class="bi bi-book me-2 text-primary"></i><strong>Dashboard</strong>
-              </a></li>
+
+          {{-- AVATAR NAVBAR --}}
+          <button class="btn p-0 border-0 bg-transparent"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">
+
+            @if(auth()->user()->avatar)
+              <img src="{{ asset(auth()->user()->avatar) }}"
+                   class="rounded-circle shadow-sm"
+                   style="width:38px; height:38px; object-fit:cover;">
+            @else
+              <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white shadow-sm"
+                   style="width:38px; height:38px; font-weight:bold;">
+                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+              </div>
             @endif
-            <li><hr class="dropdown-divider my-1"></li>
+
+          </button>
+
+          {{-- DROPDOWN --}}
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 p-3"
+              style="border:none; min-width:200px;">
+
+            {{-- DASHBOARD --}}
+            @if(auth()->user()->role == 'admin')
+              <li>
+                <a class="dropdown-item py-2 px-3 rounded-3"
+                   href="{{ route('admin.dashboard') }}">
+                  <i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard
+                </a>
+              </li>
+            @elseif(auth()->user()->role == 'petugas')
+              <li>
+                <a class="dropdown-item py-2 px-3 rounded-3"
+                   href="{{ route('petugas.dashboard') }}">
+                  <i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard
+                </a>
+              </li>
+            @else
+              <li>
+                <a class="dropdown-item py-2 px-3 rounded-3"
+                   href="{{ route('user.buku.index') }}">
+                  <i class="bi bi-book me-2 text-primary"></i>Dashboard
+                </a>
+              </li>
+            @endif
+
+            <li><hr class="dropdown-divider my-2"></li>
+
+            {{-- LOGOUT --}}
             <li>
-              <form action="{{ route('logout') }}" method="POST" class="d-inline w-100">
+              <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="dropdown-item py-2 px-3 text-danger w-100 text-start" style="transition: all 0.2s ease;">
+                <button type="submit"
+                        class="dropdown-item py-2 px-3 rounded-3 text-danger w-100 text-start">
                   <i class="bi bi-box-arrow-right me-2"></i>Logout
                 </button>
               </form>
             </li>
+
           </ul>
         </div>
       @endguest
-    </div>
 
+    </div>
   </div>
 
   {{-- MINI CART --}}
   @auth
-  @include('layouts.components-frontend.minichart')
+    @include('layouts.components-frontend.minichart')
   @endauth
 </header>

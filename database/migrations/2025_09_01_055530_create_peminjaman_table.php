@@ -9,6 +9,7 @@ return new class extends Migration {
     {
         Schema::create('peminjamans', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_peminjaman')->unique();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('buku_id')->constrained('bukus')->onDelete('cascade');
             $table->integer('jumlah_buku');

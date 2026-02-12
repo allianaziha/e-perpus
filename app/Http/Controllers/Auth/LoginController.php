@@ -29,17 +29,18 @@ class LoginController extends Controller
      */
     protected function redirectTo()
     {
-        if (auth()->user()->role === 'admin') {
-            return '/admin/dashboard'; // otomatis ke halaman admin
+        $user = Auth::user();
+
+        if ($user && $user->role === 'admin') {
+            return '/admin/dashboard';
         }
 
-        if (auth()->user()->role === 'petugas') {
+        if ($user && $user->role === 'petugas') {
             return '/petugas/dashboard';
         }
 
-        return '/'; // default untuk user biasa
+        return '/';
     }
-
 
     /**
      * Create a new controller instance.

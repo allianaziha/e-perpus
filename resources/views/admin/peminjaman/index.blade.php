@@ -48,71 +48,103 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($peminjaman as $index => $data)
+                                @php
+                                    // Kelompokkan peminjaman berdasarkan user_id dan tgl_pinjam (termasuk jam)
+                                    $grouped = $peminjaman->groupBy(function($item) {
+                                        return $item->user_id . '|' . $item->tgl_pinjam;
+                                    });
+                                    $counter = 0;
+                                @endphp
+                                @foreach ($grouped as $group)
+                                    @php
+                                        $counter++;
+                                        $firstItem = $group->first();
+                                    @endphp
                                     <tr>
-                                        <td class="text-center">{{ $index + 1 }}</td>
-                                        <td class="text-center">{{ $data->user->name }}</td>
-                                        <td class="text-center">{{ $data->buku->judul }}</td>
-                                        <td class="text-center">{{ $data->jumlah_buku }}</td>
-                                        <td class="text-center">{{ $data->tgl_pinjam }}</td>
-                                        <td class="text-center">{{ $data->tgl_jatuh_tempo }}</td>
+                                        <td class="text-center">{{ $counter }}</td>
+                                        <td class="text-center">{{ $firstItem->user->name }}</td>
                                         <td class="text-center">
-                                            @if ($data->status == 'pending')
+                                            <ul class="mb-0 ps-3" style="text-align: left;">
+                                                @foreach ($group as $item)
+                                                    <li>{{ $item->buku->judul }} ({{ $item->jumlah_buku }})</li>
+                                                @endforeach
+                                            </ul>
+                                        </td>
+                                        <td class="text-center">
+                                            @php
+                                                $totalJumlah = $group->sum('jumlah_buku');
+                                            @endphp
+                                            {{ $totalJumlah }}
+                                        </td>
+                                        <td class="text-center">{{ \Carbon\Carbon::parse($firstItem->tgl_pinjam)->format('d-m-Y H:i') }}</td>
+                                        <td class="text-center">
+                                            @if ($firstItem->status == 'pending')
+                                                <span class="text-muted">-</span>
+                                            @else
+                                                {{ \Carbon\Carbon::parse($firstItem->tgl_jatuh_tempo)->format('d-m-Y H:i') }}
+                                            @endif
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($firstItem->status == 'pending')
                                                 <span class="badge bg-warning text-dark">Pending</span>
-                                            @elseif ($data->status == 'dipinjam')
+                                            @elseif ($firstItem->status == 'dipinjam')
                                                 <span class="badge bg-secondary">Dipinjam</span>
-                                            @elseif ($data->status == 'dikembalikan')
+                                            @elseif ($firstItem->status == 'dikembalikan')
                                                 <span class="badge bg-success">kembali</span>
-                                            @elseif ($data->status == 'ditolak')
+                                            @elseif ($firstItem->status == 'ditolak')
                                                 <span class="badge bg-danger">Ditolak</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <div class="d-flex justify-content-center gap-1">
-                                                {{-- Tombol detail tetap ada --}}
-                                                <a href="{{ route('admin.peminjaman.show', $data->id) }}" 
+                                            <div class="d-flex justify-content-center gap-1 flex-wrap">
+                                                {{-- Tombol detail (hanya untuk item pertama) --}}
+                                                <a href="{{ route('admin.peminjaman.show', $firstItem->id) }}" 
                                                 class="btn btn-sm btn-info" title="Detail">
                                                     <i class="ti ti-eye"></i>
                                                 </a>
 
-                                                @if ($data->status == 'pending')
+                                                @if ($firstItem->status == 'pending')
                                                     {{-- Kalau masih pending → tampil ACC & Tolak --}}
-                                                    <form action="{{ route('admin.peminjaman.approve', $data->id) }}" method="POST" onsubmit="return confirm('Setujui peminjaman ini?')">
+                                                    @php
+                                                        // Ambil ID pertama untuk approve/reject seluruh group
+                                                        $actionId = $firstItem->id;
+                                                    @endphp
+                                                    <form action="{{ route('admin.peminjaman.approve', $actionId) }}" method="POST" onsubmit="return confirm('Setujui semua peminjaman ini?')">
                                                         @csrf
                                                         @method('PATCH')
                                                         <button type="submit" class="btn btn-sm btn-success" title="Setujui"><i class="ti ti-check"></i></button>
                                                     </form>
-                                                    <form action="{{ route('admin.peminjaman.reject', $data->id) }}" method="POST" onsubmit="return confirm('Tolak peminjaman ini?')">
+                                                    <form action="{{ route('admin.peminjaman.reject', $actionId) }}" method="POST" onsubmit="return confirm('Tolak semua peminjaman ini?')">
                                                         @csrf
                                                         @method('PATCH')
                                                         <button type="submit" class="btn btn-sm btn-danger" title="Tolak"><i class="ti ti-x"></i></button>
                                                     </form>
 
-                                                @elseif ($data->status == 'dipinjam')
+                                                @elseif ($firstItem->status == 'dipinjam')
                                                     {{-- Kalau sudah di-ACC (dipinjam) → bisa edit & hapus --}}
-                                                    <a href="{{ route('admin.peminjaman.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                    <a href="{{ route('admin.peminjaman.edit', $firstItem->id) }}" class="btn btn-sm btn-warning" title="Edit">
                                                         <i class="ti ti-pencil"></i>
                                                     </a>
-                                                    <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
+                                                    <form action="{{ route('admin.peminjaman.destroy', $firstItem->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus semua peminjaman ini?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
                                                     </form>
 
-                                                @elseif ($data->status == 'ditolak')
+                                                @elseif ($firstItem->status == 'ditolak')
                                                     {{-- Kalau ditolak → hanya bisa hapus --}}
-                                                    <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
+                                                    <form action="{{ route('admin.peminjaman.destroy', $firstItem->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
                                                     </form>
 
-                                                @elseif ($data->status == 'dikembalikan')
+                                                @elseif ($firstItem->status == 'dikembalikan')
                                                     {{-- Kalau sudah dikembalikan → bisa edit & hapus juga --}}
-                                                    <a href="{{ route('admin.peminjaman.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit">
+                                                    <a href="{{ route('admin.peminjaman.edit', $firstItem->id) }}" class="btn btn-sm btn-warning" title="Edit">
                                                         <i class="ti ti-pencil"></i>
                                                     </a>
-                                                    <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
+                                                    <form action="{{ route('admin.peminjaman.destroy', $firstItem->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus semua peminjaman ini?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>

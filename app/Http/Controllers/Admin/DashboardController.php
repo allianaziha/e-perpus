@@ -8,7 +8,7 @@ use App\Models\Rak;
 use App\Models\Peminjaman;
 use App\Models\Pengembalian; // tambahkan ini
 use App\Models\Denda;
-use App\models\User;
+use App\Models\User;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -59,12 +59,12 @@ class DashboardController extends Controller
             'totalBuku',
             'totalRak',
             'totalDipinjam',
-            'totalPengembalian', 
+            'totalPengembalian',
             'totalDenda',
             'totalUser',
             'mingguLabels',
             'peminjamanMingguan',
-            'pengembalianMingguan', 
+            'pengembalianMingguan',
             'dendaMingguan'
         ));
     }

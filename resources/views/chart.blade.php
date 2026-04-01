@@ -61,7 +61,6 @@
                                 <tr>
                                     <th style="width: 80px;">Cover</th>
                                     <th>Judul Buku</th>
-                                    <th style="width: 130px;">Stok Tersedia</th>
                                     <th style="width: 180px;">Jumlah Pinjam</th>
                                     <th style="width: 100px;">Aksi</th>
                                 </tr>
@@ -80,9 +79,6 @@
                                     <td>
                                         <div class="book-title">{{ $item->buku->judul ?? 'Buku tidak ditemukan' }}</div>
                                         <div class="book-author">{{ $item->buku->penulis ?? '-' }}</div>
-                                    </td>
-                                    <td>
-                                        <span class="stock-badge">{{ $item->buku->stok ?? 0 }} buku</span>
                                     </td>
                                     <td>
                                         <form action="{{ route('chart.pinjam.update', $item->id) }}" method="POST" class="d-inline">

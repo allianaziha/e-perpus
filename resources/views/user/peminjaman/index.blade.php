@@ -1,6 +1,6 @@
 @extends('layouts.backend')
 
-@section ('title', 'Admin perpus - Peminjaman')
+@section ('title', ' perpus - Peminjaman')
 
 @section('styles')
 <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.bootstrap5.css">
@@ -28,7 +28,7 @@
             <div class="card shadow">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Data Peminjaman</h5>
-                    <a href="{{ route('admin.peminjaman.create') }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('user.peminjaman.create') }}" class="btn btn-primary btn-sm">
                         <i class="ti ti-plus"></i> Tambah
                     </a>
                 </div>
@@ -69,55 +69,27 @@
                                         </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center gap-1">
-                                                {{-- Tombol detail tetap ada --}}
-                                                <a href="{{ route('admin.peminjaman.show', $data->id) }}" 
-                                                class="btn btn-sm btn-info" title="Detail">
-                                                    <i class="ti ti-eye"></i>
-                                                </a>
 
-                                                @if ($data->status == 'pending')
-                                                    {{-- Kalau masih pending → tampil ACC & Tolak --}}
-                                                    <form action="{{ route('admin.peminjaman.approve', $data->id) }}" method="POST" onsubmit="return confirm('Setujui peminjaman ini?')">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit" class="btn btn-sm btn-success" title="Setujui"><i class="ti ti-check"></i></button>
-                                                    </form>
-                                                    <form action="{{ route('admin.peminjaman.reject', $data->id) }}" method="POST" onsubmit="return confirm('Tolak peminjaman ini?')">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button type="submit" class="btn btn-sm btn-danger" title="Tolak"><i class="ti ti-x"></i></button>
-                                                    </form>
+                                            {{-- DETAIL --}}
+                                            <a href="{{ route('user.peminjaman.show', $data->id) }}" 
+                                            class="btn btn-sm btn-info" title="Detail">
+                                            <i class="ti ti-eye"></i>
+                                            </a>
 
-                                                @elseif ($data->status == 'dipinjam')
-                                                    {{-- Kalau sudah di-ACC (dipinjam) → bisa edit & hapus --}}
-                                                    <a href="{{ route('admin.peminjaman.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit">
-                                                        <i class="ti ti-pencil"></i>
-                                                    </a>
-                                                    <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
-                                                    </form>
+                                            @if ($data->status == 'pending')
 
-                                                @elseif ($data->status == 'ditolak')
-                                                    {{-- Kalau ditolak → hanya bisa hapus --}}
-                                                    <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
-                                                    </form>
+                                            {{-- BATAL --}}
+                                            <form action="{{ route('user.peminjaman.batal', $data->id) }}" method="POST" 
+                                            onsubmit="return confirm('Yakin ingin membatalkan peminjaman?')">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-sm btn-warning" title="Batal">
+                                            <i class="ti ti-ban"></i>
+                                            </button>
+                                            </form>
 
-                                                @elseif ($data->status == 'dikembalikan')
-                                                    {{-- Kalau sudah dikembalikan → bisa edit & hapus juga --}}
-                                                    <a href="{{ route('admin.peminjaman.edit', $data->id) }}" class="btn btn-sm btn-warning" title="Edit">
-                                                        <i class="ti ti-pencil"></i>
-                                                    </a>
-                                                    <form action="{{ route('admin.peminjaman.destroy', $data->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus peminjaman ini?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="ti ti-trash"></i></button>
-                                                    </form>
-                                                @endif
+                                            @endif
+
                                             </div>
                                         </td>
                                     </tr>

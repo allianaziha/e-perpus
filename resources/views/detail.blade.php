@@ -176,6 +176,17 @@ function addToCart(event) {
   .then(response => response.json())
   .then(data => {
     if (data.success) {
+      // Update jumlah keranjang di navbar secara real-time
+      const cartToggle = document.getElementById('cartToggle');
+      let badge = document.getElementById('cartCountBadge');
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.id = 'cartCountBadge';
+        badge.className = 'cart-count-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger';
+        cartToggle.appendChild(badge);
+      }
+      badge.textContent = data.cart_count;
+
       Swal.fire({
         title: 'Berhasil!',
         text: 'Buku telah dimasukkan ke keranjang',

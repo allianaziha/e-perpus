@@ -64,7 +64,8 @@ class ChartPinjamController extends Controller
         }
 
         if ($request->expectsJson()) {
-            return response()->json(['success' => true, 'message' => 'Buku berhasil ditambahkan ke keranjang peminjaman.']);
+            $cartCount = ChartPinjam::where('user_id', Auth::id())->sum('qty');
+            return response()->json(['success' => true, 'message' => 'Buku berhasil ditambahkan ke keranjang peminjaman.', 'cart_count' => $cartCount]);
         }
 
         toast('Buku berhasil ditambahkan ke keranjang peminjaman.', 'success');
@@ -122,12 +123,6 @@ class ChartPinjamController extends Controller
             return redirect()->route('chart.pinjam.index');
         }
 
-        /**
-         * DI SINI NANTI:
-         * - simpan ke tabel peminjaman
-         * - kurangi stok buku
-         */
-
         foreach ($chartPinjam as $item) {
             $buku = Buku::find($item->buku_id);
             $buku->stok -= $item->qty;
@@ -135,12 +130,13 @@ class ChartPinjamController extends Controller
 
             // Buat record peminjaman untuk setiap item
             Peminjaman::create([
-                'buku_id' => $item->buku_id,
-                'user_id' => auth()->id(),
-                'jumlah_buku' => $item->qty,
-                'tgl_pinjam' => now(),
+                'kode_peminjaman' => 'PJM-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6)),  // ← tambahan ini
+                'buku_id'         => $item->buku_id,
+                'user_id'         => auth()->id(),
+                'jumlah_buku'     => $item->qty,
+                'tgl_pinjam'      => now(),
                 'tgl_jatuh_tempo' => now()->addDays(7),
-                'status' => 'pending',
+                'status'          => 'pending',
             ]);
         }
 

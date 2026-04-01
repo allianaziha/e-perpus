@@ -38,6 +38,7 @@
                             <thead class="table-primary">
                                 <tr>
                                     <th class="text-center" style="width: 5%">No</th>
+                                    <th class="text-center">Kode Peminjaman</th>
                                     <th class="text-center">Nama User</th>
                                     <th class="text-center">Judul Buku</th>
                                     <th class="text-center">Jumlah</th>
@@ -62,6 +63,7 @@
                                     @endphp
                                     <tr>
                                         <td class="text-center">{{ $counter }}</td>
+                                        <td class="text-center">{{$kode_peminajamn}}</td>
                                         <td class="text-center">{{ $firstItem->user->name }}</td>
                                         <td class="text-center">
                                             <ul class="mb-0 ps-3" style="text-align: left;">

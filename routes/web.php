@@ -19,7 +19,8 @@ use App\Http\Controllers\Petugas\DendaController as PetugasDendaController;
 use App\Http\Controllers\Petugas\DashboardController as PetugasDashboardController;
 use App\Http\Controllers\Petugas\UserController as PetugasUserController;
 use App\Http\Controllers\Petugas\BannerController as PetugasBannerController;
-use App\Http\Controllers\User\BukuController as UserBukuController;
+use App\Http\Controllers\User\BukuController as UserBukuController; 
+use App\Http\Controllers\User\PeminjamanController as UserPeminjamanController; 
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\PinjamController;
 use App\Http\Controllers\ProfileController;
@@ -67,9 +68,18 @@ Route::middleware('auth')->name('user.')->group(function() {
 });
 
 // routes/web.php
-Route::middleware('auth')->name('user.')->group(function() {
-    Route::get('user-buku', [UserBukuController::class, 'index'])->name('buku.index');
-    Route::get('user-buku/{buku}', [UserBukuController::class, 'show'])->name('buku.show');
+Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
+
+    Route::get('buku', [UserBukuController::class, 'index'])->name('buku.index');
+    Route::get('buku/{buku}', [UserBukuController::class, 'show'])->name('buku.show');
+    Route::resource('peminjaman', UserPeminjamanController::class)->except(['edit','update','destroy']);
+    Route::post('/peminjaman', [PinjamController::class, 'store'])->name('peminjaman.store');
+    Route::get('/riwayat', [PinjamController::class, 'riwayat'])->name('riwayat');
+
+    // tombol batal peminjaman
+    Route::patch('peminjaman/{peminjaman}/batal',
+        [UserPeminjamanController::class,'batal'])->name('peminjaman.batal');
+
 });
 
 Route::middleware(['auth','role:admin,petugas'])->group(function() {

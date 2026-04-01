@@ -20,8 +20,6 @@
 
 @section('content')
 <div class="container-fluid">
-    {{-- Judul Besar --}}
-    <h3 class="mb-3 fw-bold text-uppercase">USER</h3>
 
     <div class="row">
         <div class="col">

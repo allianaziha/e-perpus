@@ -140,6 +140,12 @@
             </a>
           </li>
           <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('user.peminjaman.index') }}">
+              <i class="ti ti-book-2"></i>
+              <span class="hide-menu">pinjam buku</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
             <a class="sidebar-link" href="{{ route('chart.pinjam.index') }}">
               <i class="ti ti-shopping-cart"></i>
               <span class="hide-menu">Keranjang Pinjam</span>

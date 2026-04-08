@@ -13,6 +13,7 @@
         <li><a href="{{ url('/') }}#hero" class="active">Beranda</a></li>
         <li><a href="{{ url('/') }}#about">Tentang</a></li>
 
+        {{-- DROPDOWN BUKU --}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
             Buku
@@ -28,28 +29,61 @@
         </li>
 
         <li><a href="{{ url('/') }}#contact">Kontak</a></li>
+
+        {{-- DROPDOWN PEMINJAMAN (hanya untuk user login) --}}
+        @auth
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            Peminjaman
+          </a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="{{ route('user.riwayat') }}">
+                <i class="bi bi-clock-history me-2"></i>Riwayat Peminjaman
+              </a>
+            </li>
+          </ul>
+        </li>
+        @endauth
+
       </ul>
     </nav>
 
     {{-- KANAN HEADER --}}
     <div class="d-flex align-items-center gap-3">
 
-      {{-- ICON KERANJANG --}}
+      {{-- ICON KERANJANG & FAVORIT --}}
       @auth
       @php
         $cartCount = \App\Models\ChartPinjam::where('user_id', auth()->id())->sum('qty');
+        $favoritCount = \App\Models\FavoritBuku::where('user_id', auth()->id())->count();
       @endphp
 
-      <button id="cartToggle"
-              class="btn btn-light position-relative rounded-circle shadow-sm open-cart">
-        <i class="bi bi-cart3 fs-5"></i>
+      <div class="d-flex gap-2">
+        {{-- FAVORIT --}}
+        <a href="{{ route('favorit.index') }}"
+           class="btn btn-light position-relative rounded-circle shadow-sm"
+           title="Buku Favorit">
+          <i class="bi bi-heart fs-5 text-danger"></i>
+          @if($favoritCount > 0)
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ $favoritCount }}
+            </span>
+          @endif
+        </a>
 
-        @if($cartCount > 0)
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {{ $cartCount }}
-          </span>
-        @endif
-      </button>
+        {{-- KERANJANG --}}
+        <button id="cartToggle"
+                class="btn btn-light position-relative rounded-circle shadow-sm open-cart"
+                title="Keranjang Pinjam">
+          <i class="bi bi-cart3 fs-5"></i>
+          @if($cartCount > 0)
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ $cartCount }}
+            </span>
+          @endif
+        </button>
+      </div>
       @endauth
 
       {{-- LOGIN / PROFILE --}}
@@ -77,29 +111,26 @@
 
           </button>
 
-          {{-- DROPDOWN --}}
+          {{-- DROPDOWN PROFILE --}}
           <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 p-3"
               style="border:none; min-width:200px;">
 
             {{-- DASHBOARD --}}
             @if(auth()->user()->role == 'admin')
               <li>
-                <a class="dropdown-item py-2 px-3 rounded-3"
-                   href="{{ route('admin.dashboard') }}">
+                <a class="dropdown-item py-2 px-3 rounded-3" href="{{ route('admin.dashboard') }}">
                   <i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard
                 </a>
               </li>
             @elseif(auth()->user()->role == 'petugas')
               <li>
-                <a class="dropdown-item py-2 px-3 rounded-3"
-                   href="{{ route('petugas.dashboard') }}">
+                <a class="dropdown-item py-2 px-3 rounded-3" href="{{ route('petugas.dashboard') }}">
                   <i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard
                 </a>
               </li>
             @else
               <li>
-                <a class="dropdown-item py-2 px-3 rounded-3"
-                   href="{{ route('user.buku.index') }}">
+                <a class="dropdown-item py-2 px-3 rounded-3" href="{{ route('user.buku.index') }}">
                   <i class="bi bi-book me-2 text-primary"></i>Dashboard
                 </a>
               </li>

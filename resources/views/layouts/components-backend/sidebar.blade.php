@@ -60,6 +60,12 @@
             </a>
           </li>
           <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('admin.perpanjangan.index') }}">
+              <i class="ti ti-clock-plus"></i>
+              <span class="hide-menu">Perpanjangan</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
             <a class="sidebar-link" href="{{ route('admin.pengembalian.index') }}">
               <i class="ti ti-book-download"></i>
               <span class="hide-menu">Pengembalian</span>
@@ -112,6 +118,12 @@
             </a>
           </li>
           <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('petugas.perpanjangan.index') }}">
+              <i class="ti ti-clock-plus"></i>
+              <span class="hide-menu">Perpanjangan</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
             <a class="sidebar-link" href="{{ route('petugas.pengembalian.index') }}">
               <i class="ti ti-book-download"></i>
               <span class="hide-menu">Pengembalian</span>
@@ -141,8 +153,26 @@
           </li>
           <li class="sidebar-item">
             <a class="sidebar-link" href="{{ route('user.peminjaman.index') }}">
-              <i class="ti ti-book-2"></i>
-              <span class="hide-menu">pinjam buku</span>
+              <i class="ti ti-book-upload"></i>
+              <span class="hide-menu">Pinjam Buku</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('user.perpanjangan.index') }}">
+              <i class="ti ti-clock-plus"></i>
+              <span class="hide-menu">Perpanjangan</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('user.riwayat') }}">
+              <i class="ti ti-clock-history"></i>
+              <span class="hide-menu">Riwayat Peminjaman</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a class="sidebar-link" href="{{ route('favorit.index') }}">
+              <i class="ti ti-heart"></i>
+              <span class="hide-menu">Buku Favorit</span>
             </a>
           </li>
           <li class="sidebar-item">
@@ -158,8 +188,8 @@
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link" href="{{ url('/') }}">
-            <i class="ti ti-user"></i>
-            <span class="hide-menu">User</span>
+            <i class="ti ti-world"></i>
+            <span class="hide-menu">Beranda</span>
           </a>
         </li>
       </ul>

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\PerpanjanganController as AdminPerpanjanganController;
 use App\Http\Controllers\Petugas\BukuController as PetugasBukuController;
 use App\Http\Controllers\Petugas\PeminjamanController as PetugasPeminjamanController;
 use App\Http\Controllers\Petugas\PengembalianController as PetugasPengembalianController;
@@ -19,8 +20,8 @@ use App\Http\Controllers\Petugas\DendaController as PetugasDendaController;
 use App\Http\Controllers\Petugas\DashboardController as PetugasDashboardController;
 use App\Http\Controllers\Petugas\UserController as PetugasUserController;
 use App\Http\Controllers\Petugas\BannerController as PetugasBannerController;
-use App\Http\Controllers\User\BukuController as UserBukuController; 
-use App\Http\Controllers\User\PeminjamanController as UserPeminjamanController; 
+use App\Http\Controllers\Petugas\PerpanjanganController as PetugasPerpanjanganController;
+use App\Http\Controllers\User\PerpanjanganController; 
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\PinjamController;
 use App\Http\Controllers\ProfileController;
@@ -47,6 +48,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('laporan/pdf', [LaporanController::class, 'exportPDF'])->name('laporan.exportPDF');
     Route::get('laporan/excel', [LaporanController::class, 'exportExcel'])->name('laporan.exportExcel');
     Route::resource('banner', BannerController::class);
+    Route::resource('perpanjangan', AdminPerpanjanganController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
+    Route::patch('perpanjangan/{perpanjangan}/approve', [AdminPerpanjanganController::class, 'approve'])->name('perpanjangan.approve');
+    Route::patch('perpanjangan/{perpanjangan}/reject', [AdminPerpanjanganController::class, 'reject'])->name('perpanjangan.reject');
 
 });
 
@@ -60,6 +64,9 @@ Route::prefix('petugas')->name('petugas.')->group(function () {
     Route::resource('denda', PetugasDendaController::class);  
     Route::resource('user', PetugasUserController::class);
     Route::resource('banner', PetugasBannerController::class);
+    Route::resource('perpanjangan', PetugasPerpanjanganController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
+    Route::patch('perpanjangan/{perpanjangan}/approve', [PetugasPerpanjanganController::class, 'approve'])->name('perpanjangan.approve');
+    Route::patch('perpanjangan/{perpanjangan}/reject', [PetugasPerpanjanganController::class, 'reject'])->name('perpanjangan.reject');
 });
 
 Route::middleware('auth')->name('user.')->group(function() {
@@ -79,6 +86,9 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
     // tombol batal peminjaman
     Route::patch('peminjaman/{peminjaman}/batal',
         [UserPeminjamanController::class,'batal'])->name('peminjaman.batal');
+
+    // Route untuk perpanjangan peminjaman
+    Route::resource('perpanjangan', PerpanjanganController::class)->except(['edit', 'update', 'destroy']);
 
 });
 
@@ -121,6 +131,13 @@ Route::prefix('chart-pinjam')->middleware('auth')->group(function () {
     Route::put('/update/{id}', [ChartPinjamController::class, 'update'])->name('chart.pinjam.update');
     Route::delete('/remove/{id}', [ChartPinjamController::class, 'remove'])->name('chart.pinjam.remove');
     Route::get('/checkout', [ChartPinjamController::class, 'checkout'])->name('chart.pinjam.checkout');
+});
+
+// Favorit Routes
+Route::middleware('auth')->prefix('favorit')->name('favorit.')->group(function () {
+    Route::get('/', [App\Http\Controllers\FavoritController::class, 'index'])->name('index');
+    Route::post('/store', [App\Http\Controllers\FavoritController::class, 'store'])->name('store');
+    Route::delete('/{bukuId}', [App\Http\Controllers\FavoritController::class, 'destroy'])->name('destroy');
 });
 
 

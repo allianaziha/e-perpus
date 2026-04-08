@@ -25,7 +25,12 @@ class BerandaController extends Controller
             ->get();
 
         // Banner aktif
-        $banners = Banner::where('status', 'aktif')->get();
+        $banners = Banner::where('status', 'aktif')
+            ->get(); // ambil semua banner aktif
+
+        $userCount = User::count(); // atau User::count()
+        $bukuCount = Buku::count();
+        $pinjamCount = Peminjaman::count();
 
         return response()->json([
             'success' => true,
@@ -33,9 +38,9 @@ class BerandaController extends Controller
                 'populer' => $populer,
                 'terbaru' => $terbaru,
                 'banners' => $banners,
-                'userCount' => User::count(),
-                'bukuCount' => Buku::count(),
-                'pinjamCount' => Peminjaman::count(),
+                'userCount' => $userCount,
+                'bukuCount' => $bukuCount,
+                'pinjamCount' => $pinjamCount,
             ]
         ]);
     }

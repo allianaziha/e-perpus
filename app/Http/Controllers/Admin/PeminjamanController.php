@@ -61,6 +61,7 @@ class PeminjamanController extends Controller
         }
 
         Peminjaman::create([
+            'kode_peminjaman' => 'PJ-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 6)),
             'user_id'         => $request->user_id,
             'buku_id'         => $request->buku_id,
             'jumlah_buku'     => $request->jumlah_buku,

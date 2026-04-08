@@ -30,6 +30,16 @@ class User extends Authenticatable
         return $this->hasMany(ChartPinjam::class); 
     }
 
+    public function favoritBukus()
+    {
+        return $this->hasMany(FavoritBuku::class);
+    }
+
+    public function favoritBukuIds()
+    {
+        return $this->favoritBukus()->pluck('buku_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

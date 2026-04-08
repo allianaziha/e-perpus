@@ -86,6 +86,15 @@
       {{-- AKSI --}}
       <div class="action-buttons">
   @auth
+  {{-- Tombol Favorit --}}
+  <button type="button"
+          class="btn {{ $buku->isFavoritByUser() ? 'btn-danger' : 'btn-outline-danger' }} me-2"
+          id="favoritBtn"
+          onclick="toggleFavorit({{ $buku->id }})">
+    <i class="bi {{ $buku->isFavoritByUser() ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+    {{ $buku->isFavoritByUser() ? 'Hapus Favorit' : 'Tambah Favorit' }}
+  </button>
+
   <form id="addToCartForm"
         action="{{ route('chart.pinjam.add', $buku) }}"
         method="POST"
@@ -209,6 +218,69 @@ function addToCart(event) {
       text: 'Terjadi kesalahan saat menambahkan ke keranjang',
       icon: 'error'
     });
+  });
+}
+
+function toggleFavorit(bukuId) {
+  const btn = document.getElementById('favoritBtn');
+  const icon = btn.querySelector('i');
+  const text = btn.querySelector('span') || btn;
+
+  // Disable button during request
+  btn.disabled = true;
+  const originalText = btn.innerHTML;
+
+  fetch('{{ route("favorit.store") }}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    },
+    body: JSON.stringify({ buku_id: bukuId })
+  })
+  .then(response => {
+    return response.json().then(data => ({ status: response.status, ok: response.ok, data }));
+  })
+  .then(result => {
+    const { ok, data } = result;
+
+    if (ok) {
+      if (data.action === 'added') {
+        btn.classList.remove('btn-outline-danger');
+        btn.classList.add('btn-danger');
+        btn.innerHTML = '<i class="bi bi-heart-fill"></i> Hapus Favorit';
+      } else if (data.action === 'removed') {
+        btn.classList.remove('btn-danger');
+        btn.classList.add('btn-outline-danger');
+        btn.innerHTML = '<i class="bi bi-heart"></i> Tambah Favorit';
+      }
+
+      Swal.fire({
+        title: 'Berhasil!',
+        text: data.message,
+        icon: 'success',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    } else {
+      Swal.fire({
+        title: 'Gagal!',
+        text: data.message || 'Terjadi kesalahan',
+        icon: 'error'
+      });
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    Swal.fire({
+      title: 'Error!',
+      text: 'Terjadi kesalahan saat memproses favorit',
+      icon: 'error'
+    });
+  })
+  .finally(() => {
+    btn.disabled = false;
   });
 }
 </script>

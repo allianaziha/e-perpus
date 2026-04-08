@@ -50,20 +50,18 @@
                             </thead>
                             <tbody>
                                 @php
-                                    // Kelompokkan peminjaman berdasarkan user_id dan tgl_pinjam (termasuk jam)
-                                    $grouped = $peminjaman->groupBy(function($item) {
-                                        return $item->user_id . '|' . $item->tgl_pinjam;
-                                    });
+                                    // Kelompokkan peminjaman berdasarkan kode_peminjaman
+                                    $grouped = $peminjaman->groupBy('kode_peminjaman');
                                     $counter = 0;
                                 @endphp
-                                @foreach ($grouped as $group)
+                                @foreach ($grouped as $kode_peminjaman => $group)
                                     @php
                                         $counter++;
                                         $firstItem = $group->first();
                                     @endphp
                                     <tr>
                                         <td class="text-center">{{ $counter }}</td>
-                                        <td class="text-center">{{$kode_peminajamn}}</td>
+                                        <td class="text-center">{{ $kode_peminjaman ?: 'N/A' }}</td>
                                         <td class="text-center">{{ $firstItem->user->name }}</td>
                                         <td class="text-center">
                                             <ul class="mb-0 ps-3" style="text-align: left;">
@@ -78,12 +76,12 @@
                                             @endphp
                                             {{ $totalJumlah }}
                                         </td>
-                                        <td class="text-center">{{ \Carbon\Carbon::parse($firstItem->tgl_pinjam)->format('d-m-Y H:i') }}</td>
+                                        <td class="text-center">{{ \Carbon\Carbon::parse($firstItem->tgl_pinjam)->format('d-m-Y') }}</td>
                                         <td class="text-center">
-                                            @if ($firstItem->status == 'pending')
-                                                <span class="text-muted">-</span>
+                                            @if ($firstItem->tgl_jatuh_tempo)
+                                                {{ \Carbon\Carbon::parse($firstItem->tgl_jatuh_tempo)->format('d-m-Y') }}
                                             @else
-                                                {{ \Carbon\Carbon::parse($firstItem->tgl_jatuh_tempo)->format('d-m-Y H:i') }}
+                                                <span class="text-muted">-</span>
                                             @endif
                                         </td>
                                         <td class="text-center">

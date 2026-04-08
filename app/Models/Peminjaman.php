@@ -34,4 +34,15 @@ class Peminjaman extends Model
     {
         return $this->hasOne(Pengembalian::class);
     }
+
+    public function perpanjanganRequests()
+    {
+        return $this->hasMany(PerpanjanganRequest::class);
+    }
+
+    public function latestPerpanjanganRequest()
+    {
+        return $this->hasOne(PerpanjanganRequest::class)->latest();
+    }
+
 }

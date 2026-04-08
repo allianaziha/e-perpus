@@ -37,13 +37,14 @@ class PinjamController extends Controller
             $buku->stok -= $item->qty;
             $buku->save();
 
-            // Simpan peminjaman
+            // Simpan peminjaman (tgl_jatuh_tempo akan dihitung saat diapprove)
             Peminjaman::create([
+                'kode_peminjaman' => 'PJ-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 6)),
                 'buku_id' => $buku->id,
                 'user_id' => auth()->id(),
                 'jumlah_buku' => $item->qty,
                 'tgl_pinjam' => now(),
-                'tgl_jatuh_tempo' => now()->addDays(7),
+                'tgl_jatuh_tempo' => null,
                 'status' => 'pending',
             ]);
 

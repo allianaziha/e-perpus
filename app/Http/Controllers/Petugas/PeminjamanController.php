@@ -40,10 +40,13 @@ class PeminjamanController extends Controller
         ]);
 
         $tglPinjam     = $request->tgl_pinjam;
-        $tglJatuhTempo = Carbon::parse($tglPinjam)->addDays(7)->format('Y-m-d');
+        // tgl_jatuh_tempo hanya dihitung jika status dipinjam
+        $tglJatuhTempo = null;
 
         if (auth()->check() && in_array(auth()->user()->role, ['admin','petugas'])) {
             $status = 'dipinjam';
+            // Jika langsung dipinjam, hitung tgl_jatuh_tempo 7 hari dari tgl_pinjam
+            $tglJatuhTempo = Carbon::parse($tglPinjam)->addDays(7)->format('Y-m-d');
         } else {
             $status = 'pending';
         }
@@ -59,6 +62,7 @@ class PeminjamanController extends Controller
         }
 
         Peminjaman::create([
+            'kode_peminjaman' => 'PJ-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 6)),
             'user_id'         => $request->user_id,
             'buku_id'         => $request->buku_id,
             'jumlah_buku'     => $request->jumlah_buku,
@@ -143,7 +147,13 @@ class PeminjamanController extends Controller
         $buku->stok -= $peminjaman->jumlah_buku;
         $buku->save();
 
-        $peminjaman->update(['status' => 'dipinjam']);
+        // Hitung tgl_jatuh_tempo saat approve (7 hari dari sekarang)
+        $tglJatuhTempo = now()->addDays(7);
+        
+        $peminjaman->update([
+            'status' => 'dipinjam',
+            'tgl_jatuh_tempo' => $tglJatuhTempo,
+        ]);
 
         toast('Peminjaman disetujui', 'success');
         return redirect()->route('petugas.peminjaman.index');

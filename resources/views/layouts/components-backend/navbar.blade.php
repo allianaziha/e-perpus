@@ -5,6 +5,15 @@
                 <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">
 
                     <!-- ------------------------------- -->
+                    <!-- Favorit -->
+                    <!-- ------------------------------- -->
+                    <li class="nav-item nav-icon-hover-bg rounded-circle">
+                        <a class="nav-link" href="{{ route('favorit.index') }}" title="Buku Favorit">
+                            <i class="ti ti-heart"></i>
+                        </a>
+                    </li>
+
+                    <!-- ------------------------------- -->
                     <!-- Notifikasi Peminjaman -->
                     <!-- ------------------------------- -->
                     @php

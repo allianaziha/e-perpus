@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BerandaController;
+use App\Http\Controllers\Api\BukuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,13 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/beranda', [BerandaController::class, 'index']);
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
+Route::apiResource('bukus', BukuController::class);
+Route::middleware('auth:sanctum')->get('/bukus/favorit', [BukuController::class, 'favorit']);
+Route::middleware('auth:sanctum')->post('/bukus/toggle-favorit', [BukuController::class, 'toggleFavorit']);
+
+Route::prefix('buku')->group(function () {
+    Route::get('/', [BukuController::class, 'index']);
+    Route::get('/semua', [BukuController::class, 'semua']);
+    Route::get('/{id}', [BukuController::class, 'detail']);
+});

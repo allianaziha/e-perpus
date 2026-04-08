@@ -43,4 +43,15 @@ class Buku extends Model
         return $this->hasMany(ChartPinjam::class);
     }
 
+    public function favoritBukus()
+    {
+        return $this->hasMany(FavoritBuku::class);
+    }
+
+    public function isFavoritByUser($userId = null)
+    {
+        $userId = $userId ?: auth()->id();
+        return $this->favoritBukus()->where('user_id', $userId)->exists();
+    }
+
 }

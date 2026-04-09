@@ -14,7 +14,9 @@ class PeminjamanController extends Controller
 
     public function index()
     {
-        $peminjaman = Peminjaman::with(['user','buku'])->latest()->get();
+        $peminjaman = Peminjaman::with(['user','buku'])
+            ->where('user_id', auth()->id())
+            ->latest()->get();
 
         $title = 'Hapus Peminjaman!';
         $text  = 'Apakah anda yakin ingin menghapus data ini?';
@@ -209,4 +211,4 @@ class PeminjamanController extends Controller
         return view('user.peminjaman.index', compact('peminjaman'));
     }
 
-}  
+}

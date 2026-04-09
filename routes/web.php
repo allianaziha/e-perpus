@@ -21,6 +21,8 @@ use App\Http\Controllers\Petugas\DashboardController as PetugasDashboardControll
 use App\Http\Controllers\Petugas\UserController as PetugasUserController;
 use App\Http\Controllers\Petugas\BannerController as PetugasBannerController;
 use App\Http\Controllers\Petugas\PerpanjanganController as PetugasPerpanjanganController;
+use App\Http\Controllers\User\BukuController as UserBukuController;
+use App\Http\Controllers\User\PeminjamanController as UserPeminjamanController;
 use App\Http\Controllers\User\PerpanjanganController; 
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\PinjamController;

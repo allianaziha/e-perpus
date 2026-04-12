@@ -139,7 +139,10 @@ class PeminjamanController extends Controller
         $buku->stok -= $peminjaman->jumlah_buku;
         $buku->save();
 
-        $peminjaman->update(['status' => 'dipinjam']);
+        $peminjaman->update([
+            'status' => 'dipinjam',
+            'is_read' => false
+        ]);
 
         toast('Peminjaman disetujui', 'success');
         return redirect()->route('admin.peminjaman.index');

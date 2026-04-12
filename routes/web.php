@@ -90,7 +90,10 @@ Route::middleware('auth')->prefix('user')->name('user.')->group(function () {
         [UserPeminjamanController::class,'batal'])->name('peminjaman.batal');
 
     // Route untuk perpanjangan peminjaman
-    Route::resource('perpanjangan', PerpanjanganController::class)->except(['edit', 'update', 'destroy']);
+    Route::get('perpanjangan/create/{peminjaman}', [PerpanjanganController::class, 'create'])
+        ->name('perpanjangan.create');
+    Route::resource('perpanjangan', PerpanjanganController::class)
+        ->except(['create', 'edit', 'update', 'destroy']);
 
 });
 

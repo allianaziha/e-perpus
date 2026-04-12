@@ -19,6 +19,7 @@ class PerpanjanganRequest extends Model
         'catatan_admin',
         'approved_at',
         'approved_by',
+        'is_read',
     ];
 
     protected $casts = [
@@ -34,6 +35,12 @@ class PerpanjanganRequest extends Model
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    // Helper to get user through peminjaman relationship
+    public function user()
+    {
+        return $this->peminjaman->user;
     }
 
     // Scopes
@@ -75,6 +82,7 @@ class PerpanjanganRequest extends Model
             'approved_at' => now(),
             'approved_by' => $approvedBy,
             'catatan_admin' => $catatan,
+            'is_read' => false,
         ]);
 
         // Update tanggal jatuh tempo peminjaman

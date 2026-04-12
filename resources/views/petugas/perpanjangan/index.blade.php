@@ -129,7 +129,7 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    @if($perpanjangans->count() > 0)
+                    @if($perpanjanganRequests->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered align-middle mb-0" id="dataPerpanjangan">
                                 <thead class="table-primary">
@@ -146,7 +146,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($perpanjangans as $index => $perpanjangan)
+                                    @foreach($perpanjanganRequests as $index => $perpanjangan)
                                         <tr>
                                             <td class="text-center">{{ $index + 1 }}</td>
                                             <td>

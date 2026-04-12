@@ -27,6 +27,10 @@
         margin-bottom: 1rem;
         opacity: 0.5;
     }
+    /* Fix layout issues for user pages */
+    .body-wrapper {
+        padding-top: 20px !important;
+    }
 </style>
 @endsection
 

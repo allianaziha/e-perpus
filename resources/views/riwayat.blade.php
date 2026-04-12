@@ -2,6 +2,15 @@
 
 @section ('title', 'Riwayat Peminjaman - Perpus')
 
+@section('styles')
+<style>
+    /* Fix layout issues for user pages */
+    .body-wrapper {
+        padding-top: 20px !important;
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="row">

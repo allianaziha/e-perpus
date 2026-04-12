@@ -90,6 +90,16 @@ class PeminjamanController extends Controller
 
     public function show(Peminjaman $peminjaman)
     {
+        // Pastikan peminjaman milik user
+        if ($peminjaman->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Tandai notifikasi sebagai sudah dibaca jika status dipinjam
+        if ($peminjaman->status === 'dipinjam' && !$peminjaman->is_read) {
+            $peminjaman->update(['is_read' => true]);
+        }
+
         $peminjaman->load(['user','buku']);
         return view('user.peminjaman.show', compact('peminjaman'));
     }

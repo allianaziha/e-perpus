@@ -102,6 +102,11 @@ class PerpanjanganController extends Controller
             abort(403);
         }
 
+        // Tandai notifikasi sebagai sudah dibaca
+        if (!$perpanjangan->is_read) {
+            $perpanjangan->update(['is_read' => true]);
+        }
+
         $perpanjangan->load(['peminjaman.buku', 'approvedBy']);
 
         return view('user.perpanjangan.show', compact('perpanjangan'));

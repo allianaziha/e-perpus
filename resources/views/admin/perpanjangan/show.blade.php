@@ -206,7 +206,7 @@
 
                     <div class="info-section">
                         <h6 class="text-muted mb-2">Jumlah Pinjam</h6>
-                        <p class="mb-0 fw-bold">{{ $perpanjangan->peminjaman->jumlah }} buku</p>
+                        <p class="mb-0 fw-bold">{{ $perpanjangan->peminjaman->jumlah_buku }} buku</p>
                     </div>
                 </div>
             </div>

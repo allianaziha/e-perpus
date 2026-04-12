@@ -78,7 +78,7 @@
                         <div class="row mt-2">
                             <div class="col-md-6">
                                 <strong>Jumlah Pinjam:</strong><br>
-                                {{ $peminjaman->jumlah }} buku
+                                {{ $peminjaman->jumlah_buku }} buku
                             </div>
                         </div>
                     </div>

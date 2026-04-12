@@ -15,6 +15,10 @@
         transform: translateY(-3px);
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12) !important;
     }
+    /* Fix layout issues for user pages */
+    .body-wrapper {
+        padding-top: 20px !important;
+    }
 </style>
 @endsection
 

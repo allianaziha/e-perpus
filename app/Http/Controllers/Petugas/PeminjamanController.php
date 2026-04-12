@@ -153,6 +153,7 @@ class PeminjamanController extends Controller
         $peminjaman->update([
             'status' => 'dipinjam',
             'tgl_jatuh_tempo' => $tglJatuhTempo,
+            'is_read' => false
         ]);
 
         toast('Peminjaman disetujui', 'success');

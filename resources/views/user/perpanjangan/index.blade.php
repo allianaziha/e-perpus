@@ -23,6 +23,10 @@
     .badge-pending { background-color: #ffc107; color: #000; }
     .badge-approved { background-color: #28a745; color: #fff; }
     .badge-rejected { background-color: #dc3545; color: #fff; }
+    /* Fix layout issues for user pages */
+    .body-wrapper {
+        padding-top: 20px !important;
+    }
 </style>
 @endsection
 
@@ -78,7 +82,7 @@
                                                 <strong>{{ $peminjaman->buku->judul }}</strong><br>
                                                 <small class="text-muted">{{ $peminjaman->buku->pengarang }}</small>
                                             </td>
-                                            <td class="text-center">{{ $peminjaman->jumlah }}</td>
+                                            <td class="text-center">{{ $peminjaman->jumlah_buku }}</td>
                                             <td class="text-center">{{ \Carbon\Carbon::parse($peminjaman->tgl_pinjam)->format('d/m/Y') }}</td>
                                             <td class="text-center">
                                                 {{ \Carbon\Carbon::parse($peminjaman->tgl_jatuh_tempo)->format('d/m/Y') }}

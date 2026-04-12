@@ -29,7 +29,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(ChartPinjam::class); 
     }
-
+     
     public function favoritBukus()
     {
         return $this->hasMany(FavoritBuku::class);

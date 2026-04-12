@@ -17,7 +17,13 @@ class Peminjaman extends Model
         'jumlah_buku',
         'tgl_pinjam',
         'tgl_jatuh_tempo',
-        'status'
+        'status',
+        'is_read'
+    ];
+
+    protected $casts = [
+        'tgl_pinjam' => 'date',
+        'tgl_jatuh_tempo' => 'date',
     ];
 
     public function user()

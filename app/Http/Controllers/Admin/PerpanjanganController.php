@@ -9,17 +9,29 @@ use Alert;
 
 class PerpanjanganController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $perpanjanganRequests = PerpanjanganRequest::with(['peminjaman.user', 'peminjaman.buku', 'approvedBy'])
-            ->latest()
-            ->get();
+        $query = PerpanjanganRequest::with(['peminjaman.user', 'peminjaman.buku', 'approvedBy'])
+            ->latest();
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $perpanjanganRequests = $query->get();
+
+        $stats = [
+            'pending' => PerpanjanganRequest::where('status', 'pending')->count(),
+            'approved' => PerpanjanganRequest::where('status', 'approved')->count(),
+            'rejected' => PerpanjanganRequest::where('status', 'rejected')->count(),
+            'total' => PerpanjanganRequest::count(),
+        ];
 
         $title = 'Hapus Perpanjangan!';
         $text = 'Apakah anda yakin ingin menghapus data ini?';
         confirmDelete($title, $text);
 
-        return view('admin.perpanjangan.index', compact('perpanjanganRequests'));
+        return view('admin.perpanjangan.index', compact('perpanjanganRequests', 'stats'));
     }
 
     public function show(PerpanjanganRequest $perpanjangan)

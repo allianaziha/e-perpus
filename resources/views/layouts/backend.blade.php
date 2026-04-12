@@ -13,6 +13,29 @@
   <!-- Core Css -->
   <link rel="stylesheet" href="{{asset('assets/backend/css/styles.css')}}" />
   @yield('styles')
+  <style>
+    .body-wrapper {
+      padding-top: calc(70px + 10px) !important;
+    }
+
+    .topbar {
+      z-index: 11 !important;
+    }
+
+    .navbar-nav .dropdown-menu {
+      z-index: 1060 !important;
+    }
+
+    @media (min-width: 1300px) {
+      [data-layout="vertical"] .page-wrapper {
+        margin-left: 270px !important;
+      }
+      [data-layout="vertical"] .topbar {
+        width: calc(100% - 270px) !important;
+        left: 270px !important;
+      }
+    }
+  </style>
   <title>@yield('title', 'Admin Perpustakaan')</title>
   <!-- Owl Carousel  --> 
   <link rel="stylesheet" href="{{asset('assets/backend/libs/owl.carousel/dist/assets/owl.carousel.min.css')}}" />

@@ -54,7 +54,7 @@ class PeminjamanController extends Controller
         ]);
 
         $tglPinjam     = $request->tgl_pinjam;
-        $tglJatuhTempo = Carbon::parse($tglPinjam)->addDays(7)->format('Y-m-d');
+        $tglJatuhTempo = null; // Akan dihitung saat approve
 
         // generate kode
         $last = Peminjaman::latest()->first();

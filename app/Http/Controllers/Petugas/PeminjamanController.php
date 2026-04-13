@@ -147,11 +147,13 @@ class PeminjamanController extends Controller
         $buku->stok -= $peminjaman->jumlah_buku;
         $buku->save();
 
-        // Hitung tgl_jatuh_tempo saat approve (7 hari dari sekarang)
+        // Hitung tgl_pinjam dan tgl_jatuh_tempo saat approve (7 hari dari sekarang)
+        $tglPinjam = now();
         $tglJatuhTempo = now()->addDays(7);
         
         $peminjaman->update([
             'status' => 'dipinjam',
+            'tgl_pinjam' => $tglPinjam,
             'tgl_jatuh_tempo' => $tglJatuhTempo,
             'is_read' => false
         ]);

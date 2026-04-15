@@ -10,14 +10,6 @@
     {{-- NAVBAR --}}
     <nav id="navmenu" class="navmenu">
       <ul>
-        {{-- 
-          FIX #1: Active state navbar
-          - Beranda: active hanya kalau di halaman "/" (homepage)
-          - Tentang: sama, bagian dari homepage
-          - Buku: active kalau URL mengandung "buku" (semua halaman buku)
-          - Peminjaman: active kalau route mengandung "riwayat"
-        --}}
-
         <li>
           <a href="{{ url('/') }}#hero"
              class="{{ request()->is('/') ? 'active' : '' }}">
@@ -48,32 +40,6 @@
             </li>
           </ul>
         </li>
-
-        <li>
-          <a href="{{ url('/') }}#contact"
-             class="{{ request()->is('/') ? 'active' : '' }}">
-            Kontak
-          </a>
-        </li>
-
-        {{-- DROPDOWN PEMINJAMAN (hanya untuk user login) --}}
-        @auth
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle {{ request()->routeIs('user.riwayat*') ? 'active' : '' }}"
-             href="#"
-             data-bs-toggle="dropdown">
-            Peminjaman
-          </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a class="dropdown-item" href="{{ route('user.riwayat') }}">
-                <i class="bi bi-clock-history me-2"></i>Riwayat Peminjaman
-              </a>
-            </li>
-          </ul>
-        </li>
-        @endauth
-
       </ul>
     </nav>
 
@@ -212,22 +178,6 @@
     @include('layouts.components-frontend.minichart')
   @endauth
 </header>
-
-
-{{-- 
-  FIX #3: Script update badge favorit & keranjang realtime tanpa refresh
-  
-  Cara pakai:
-  1. Di tombol favorit halaman detail buku, tambahkan:
-     - id="btn-favorit-toggle"
-     - data-url="{{ route('favorit.toggle', $buku->id) }}"   ← sesuaikan route-nya
-  
-  2. Di FavoritController, return JSON:
-     return response()->json(['count' => FavoritBuku::where('user_id', auth()->id())->count()]);
-  
-  3. Di CartController (saat tambah keranjang), return JSON:
-     return response()->json(['count' => ChartPinjam::where('user_id', auth()->id())->count()]);
---}}
 @auth
 <script>
   // ── HELPER: update badge di navbar ──────────────────────────────

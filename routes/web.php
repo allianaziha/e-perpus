@@ -132,9 +132,11 @@ Route::post('/profile/delete-avatar', [ProfileController::class, 'deleteAvatar']
 // ChartPinjam
 Route::prefix('chart-pinjam')->middleware('auth')->group(function () {
     Route::get('/', [ChartPinjamController::class, 'index'])->name('chart.pinjam.index');
+    Route::get('/mini', [ChartPinjamController::class, 'mini'])->name('chart.pinjam.mini');
     Route::post('/add/{buku}', [ChartPinjamController::class, 'add'])->name('chart.pinjam.add');
     Route::put('/update/{id}', [ChartPinjamController::class, 'update'])->name('chart.pinjam.update');
     Route::delete('/remove/{id}', [ChartPinjamController::class, 'remove'])->name('chart.pinjam.remove');
+    Route::delete('/remove-selected', [ChartPinjamController::class, 'removeSelected'])->name('chart.pinjam.removeSelected');
     Route::get('/checkout', [ChartPinjamController::class, 'checkout'])->name('chart.pinjam.checkout');
 });
 

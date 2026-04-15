@@ -9,134 +9,135 @@
         <img src="{{ asset('assets/backend/images/logos/logo-perpus.png') }}" 
             alt="Logo Perpus" width="180" class="logo-full" />
       </a>
-    <!-- tombol toggle -->
+      <!-- tombol toggle -->
       <a href="javascript:void(0)" 
         class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
         <i class="ti ti-x"></i>
       </a>
-  </div>
+    </div>
                      
     <nav class="sidebar-nav scroll-sidebar" data-simplebar>
       <ul id="sidebarnav">
         <li class="nav-small-cap mt-3">
           <span class="hide-menu text-uppercase fw-bold text-muted">Menu Utama</span>
+        </li>
 
         {{-- Menu untuk Admin --}}
         @if(Auth::user()->role == 'admin')
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.dashboard') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
               <i class="ti ti-home me-2"></i>
               <span class="hide-menu">Dashboard</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.user.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}" href="{{ route('admin.user.index') }}">
               <i class="ti ti-users"></i>
               <span class="hide-menu">User</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.kategori.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.kategori.*') ? 'active' : '' }}" href="{{ route('admin.kategori.index') }}">
               <i class="ti ti-folders"></i>
               <span class="hide-menu">Kategori</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.rak.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.rak.*') ? 'active' : '' }}" href="{{ route('admin.rak.index') }}">
               <i class="ti ti-books"></i>
               <span class="hide-menu">Rak</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.buku.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.buku.*') ? 'active' : '' }}" href="{{ route('admin.buku.index') }}">
               <i class="ti ti-book-2"></i>
               <span class="hide-menu">Buku</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.peminjaman.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.peminjaman.*') ? 'active' : '' }}" href="{{ route('admin.peminjaman.index') }}">
               <i class="ti ti-book-upload"></i>
               <span class="hide-menu">Peminjaman</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.perpanjangan.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.perpanjangan.*') ? 'active' : '' }}" href="{{ route('admin.perpanjangan.index') }}">
               <i class="ti ti-clock-plus"></i>
               <span class="hide-menu">Perpanjangan</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.pengembalian.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.pengembalian.*') ? 'active' : '' }}" href="{{ route('admin.pengembalian.index') }}">
               <i class="ti ti-book-download"></i>
               <span class="hide-menu">Pengembalian</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.denda.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.denda.*') ? 'active' : '' }}" href="{{ route('admin.denda.index') }}">
               <i class="ti ti-cash"></i>
               <span class="hide-menu">Denda</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.laporan.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}" href="{{ route('admin.laporan.index') }}">
               <i class="ti ti-report-money"></i>
               <span class="hide-menu">Laporan</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('admin.banner.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('admin.banner.*') ? 'active' : '' }}" href="{{ route('admin.banner.index') }}">
               <i class="ti ti-photo"></i>
               <span class="hide-menu">Banner</span>
             </a>
-          </li> 
+          </li>
         @endif
 
         {{-- Menu untuk Petugas --}}
         @if(Auth::user()->role == 'petugas')
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('petugas.dashboard') }}">
+            <a class="sidebar-link {{ request()->routeIs('petugas.dashboard') ? 'active' : '' }}" href="{{ route('petugas.dashboard') }}">
               <i class="ti ti-home me-2"></i>
               <span class="hide-menu">Dashboard</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('petugas.user.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('petugas.user.*') ? 'active' : '' }}" href="{{ route('petugas.user.index') }}">
               <i class="ti ti-users"></i>
               <span class="hide-menu">Data User</span>
             </a>
-          </li> 
+          </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('petugas.buku.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('petugas.buku.*') ? 'active' : '' }}" href="{{ route('petugas.buku.index') }}">
               <i class="ti ti-book-2"></i>
               <span class="hide-menu">Data Buku</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('petugas.peminjaman.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('petugas.peminjaman.*') ? 'active' : '' }}" href="{{ route('petugas.peminjaman.index') }}">
               <i class="ti ti-book-upload"></i>
               <span class="hide-menu">Peminjaman</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('petugas.perpanjangan.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('petugas.perpanjangan.*') ? 'active' : '' }}" href="{{ route('petugas.perpanjangan.index') }}">
               <i class="ti ti-clock-plus"></i>
               <span class="hide-menu">Perpanjangan</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('petugas.pengembalian.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('petugas.pengembalian.*') ? 'active' : '' }}" href="{{ route('petugas.pengembalian.index') }}">
               <i class="ti ti-book-download"></i>
               <span class="hide-menu">Pengembalian</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('petugas.denda.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('petugas.denda.*') ? 'active' : '' }}" href="{{ route('petugas.denda.index') }}">
               <i class="ti ti-cash"></i>
               <span class="hide-menu">Denda</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('petugas.banner.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('petugas.banner.*') ? 'active' : '' }}" href="{{ route('petugas.banner.index') }}">
               <i class="ti ti-photo"></i>
               <span class="hide-menu">Banner</span>
             </a>
@@ -146,37 +147,37 @@
         {{-- Menu untuk User --}}
         @if(Auth::user()->role == 'user')
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('user.buku.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('user.buku.*') ? 'active' : '' }}" href="{{ route('user.buku.index') }}">
               <i class="ti ti-book-2"></i>
               <span class="hide-menu">Daftar Buku</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('user.peminjaman.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('user.peminjaman.*') ? 'active' : '' }}" href="{{ route('user.peminjaman.index') }}">
               <i class="ti ti-book-upload"></i>
               <span class="hide-menu">Pinjam Buku</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('user.perpanjangan.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('user.perpanjangan.*') ? 'active' : '' }}" href="{{ route('user.perpanjangan.index') }}">
               <i class="ti ti-clock-plus"></i>
               <span class="hide-menu">Perpanjangan</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('user.riwayat') }}">
+            <a class="sidebar-link {{ request()->routeIs('user.riwayat*') ? 'active' : '' }}" href="{{ route('user.riwayat') }}">
               <i class="ti ti-clock-history"></i>
               <span class="hide-menu">Riwayat Peminjaman</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('favorit.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('favorit.*') ? 'active' : '' }}" href="{{ route('favorit.index') }}">
               <i class="ti ti-heart"></i>
               <span class="hide-menu">Buku Favorit</span>
             </a>
           </li>
           <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ route('chart.pinjam.index') }}">
+            <a class="sidebar-link {{ request()->routeIs('chart.pinjam.*') ? 'active' : '' }}" href="{{ route('chart.pinjam.index') }}">
               <i class="ti ti-shopping-cart"></i>
               <span class="hide-menu">Keranjang Pinjam</span>
             </a>
@@ -187,7 +188,7 @@
           <span class="hide-menu text-uppercase fw-bold text-muted">Menu Lainnya</span>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" href="{{ url('/') }}">
+          <a class="sidebar-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">
             <i class="ti ti-world"></i>
             <span class="hide-menu">Beranda</span>
           </a>

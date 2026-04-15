@@ -1,202 +1,330 @@
-/* =========================
-   GLOBAL
-========================= */
-body.index-page {
-  padding-top: 90px;
-  background: #f9fafb;
-  min-height: 100vh;
-  font-family: 'Roboto', sans-serif;
-  color: #1f2937;
+/* ══════════════════════════════════════════════
+   SEARCH BAR SECTION — tanpa kotak, lebih bawah
+══════════════════════════════════════════════ */
+.search-bar-section {
+  padding: 90px 0 18px;   /* lebih bawah dari navbar */
+  background: transparent;
 }
 
-/* =========================
-   PAGE HEADER
-========================= */
-.page-header {
-  background: #ffffff;
-  padding: 20px 24px;
-  border-radius: 12px;
-  margin-bottom: 24px;
-  border: 1px solid #e5e7eb;
+.search-bar-inner {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 20px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   gap: 16px;
 }
 
-.page-header h4 {
-  margin: 0;
-  font-weight: 600;
-  color: #1f2937;
-}
-
-/* Search */
-.page-header .form-control {
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 14px;
-  padding: 10px 12px;
-}
-
-.page-header .form-control:focus {
-  border-color: #2563eb;
-  box-shadow: none;
-}
-
-.page-header .btn-primary {
-  background: #2563eb;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-weight: 500;
-}
-
-.page-header .btn-primary:hover {
-  background: #1d4ed8;
-}
-
-/* =========================
-   SIDEBAR
-========================= */
-.sidebar {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-}
-
-.sidebar h5 {
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 16px;
+/* ── SEARCH BOX ── */
+.search-bar-inner .search-box {
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.sidebar .list-group {
-  gap: 6px;
-}
-
-/* Sidebar Link */
-.sidebar a {
-  text-decoration: none;
-  color: #374151;
-  font-weight: 500;
-  padding: 8px 6px;
-  border-radius: 6px;
-  transition: background .2s ease, color .2s ease;
-}
-
-.sidebar a:hover {
-  background: #eff6ff;
-  color: #2563eb;
-}
-
-.sidebar a.fw-bold {
-  background: #eff6ff;
-  color: #2563eb;
-}
-
-/* Badge */
-.sidebar .badge {
-  background: #eff6ff;
-  color: #2563eb;
-  font-size: 12px;
-  font-weight: 500;
-  border-radius: 12px;
-  padding: 5px 10px;
-}
-
-/* =========================
-   GRID BUKU
-========================= */
-.book-card {
   background: #ffffff;
-  border-radius: 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 13px 22px;
+  gap: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.search-bar-inner .search-box:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12), 0 4px 24px rgba(0,0,0,0.08);
+}
+
+.search-bar-inner .search-box i {
+  font-size: 17px;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.search-bar-inner .search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 15px;
+  width: 100%;
+  color: #1e293b;
+  font-weight: 400;
+}
+
+.search-bar-inner .search-box input::placeholder {
+  color: #b0bec5;
+}
+
+/* Loader spinner saat searching */
+.search-loader {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #3b82f6;
+  font-size: 16px;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.spin { animation: spin 0.7s linear infinite; display: inline-block; }
+
+.search-bar-inner .search-box .clear-btn {
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: color .15s;
+  display: flex;
+  align-items: center;
+}
+.search-bar-inner .search-box .clear-btn:hover { color: #64748b; }
+
+/* ══════════════════════════════════════════════
+   PILLS KATEGORI — centered
+══════════════════════════════════════════════ */
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* tengah */
+  gap: 8px;
+  padding: 0;
+}
+
+.pill-kategori {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1.5px solid #e2e8f0;
+  background: #f8fafc;
+  color: #64748b;
+  transition: all .18s;
+  white-space: nowrap;
+}
+
+.pill-kategori:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: #eff6ff;
+}
+
+.pill-kategori.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.30);
+}
+
+/* ══════════════════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════════════════ */
+.page-header {
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1.5px solid #f1f5f9;
+}
+
+.page-header h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.2px;
+}
+
+.page-header .result-count {
+  font-size: 13px;
+  color: #94a3b8;
+  background: #f1f5f9;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* ══════════════════════════════════════════════
+   BOOK GRID
+══════════════════════════════════════════════ */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1399px) { .book-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 1199px) { .book-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
+@media (max-width: 767px)  { .book-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; } }
+@media (max-width: 479px)  { .book-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+
+/* ══════════════════════════════════════════════
+   BOOK CARD
+══════════════════════════════════════════════ */
+.book-card {
+  border-radius: 14px;
   overflow: hidden;
-  border: 1px solid #e5e7eb;
-  transition: transform .2s ease, box-shadow .2s ease;
+  border: 1px solid #f1f5f9;
+  background: #fff;
+  transition: transform .28s cubic-bezier(.22,.68,0,1.2), box-shadow .28s ease;
+  cursor: pointer;
+  position: relative;
 }
 
 .book-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border-color: #e2e8f0;
 }
 
-.book-card img {
+.book-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.book-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform .35s ease;
+  display: block;
 }
 
-/* =========================
-   EMPTY STATE
-========================= */
-.text-muted {
-  color: #6b7280 !important;
-  font-size: 14px;
+.book-card:hover .book-thumb img {
+  transform: scale(1.08);
 }
 
-/* =========================
-   PAGINATION
-========================= */
-.pagination {
+/* ── OVERLAY ── */
+.book-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.25) 60%, transparent 100%);
+  display: flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 32px;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity .25s ease;
 }
 
-.pagination .page-link {
-  color: #2563eb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  margin: 0 4px;
-  font-weight: 500;
-}
+.book-card:hover .book-overlay { opacity: 1; }
 
-.pagination .page-link:hover {
-  background: #eff6ff;
-  color: #2563eb;
-}
-
-.pagination .page-item.active .page-link {
-  background: #2563eb;
-  border-color: #2563eb;
-  color: #ffffff;
-}
-
-/* =========================
-   SCROLL TOP
-========================= */
-#scroll-top {
-  background: #2563eb;
+.ov-btn {
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  box-shadow: 0 6px 16px rgba(0,0,0,.15);
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  color: #1e293b;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .15s, background .15s, color .15s;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
 }
 
-#scroll-top:hover {
-  background: #1d4ed8;
+.ov-btn:hover {
+  transform: scale(1.14) translateY(-2px);
+  background: #fff;
+  color: #3b82f6;
 }
 
-/* =========================
+.ov-btn.btn-cart:hover { color: #16a34a; }
+
+/* ══════════════════════════════════════════════
+   EMPTY STATE
+══════════════════════════════════════════════ */
+.empty-state {
+  text-align: center;
+  padding: 64px 20px;
+}
+
+.empty-state .empty-icon {
+  width: 72px;
+  height: 72px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 28px;
+  color: #cbd5e1;
+}
+
+.empty-state p {
+  color: #475569;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.empty-state small {
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+.toast-custom {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: #16a34a;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 12px 20px;
+  border-radius: 12px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all .3s cubic-bezier(.22,.68,0,1.2);
+  pointer-events: none;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(22, 163, 74, 0.35);
+  max-width: 320px;
+}
+
+.toast-custom.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-custom.toast-warning {
+  background: #f59e0b;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35);
+}
+
+/* ══════════════════════════════════════════════
    RESPONSIVE
-========================= */
-@media (max-width: 768px) {
-  .page-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
+══════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .search-bar-section { padding: 72px 0 14px; }
+  .search-bar-inner { gap: 12px; }
+}
 
-  .page-header form {
-    width: 100%;
-  }
+@media (max-width: 479px) {
+  .search-bar-section { padding: 64px 0 12px; }
+  .search-bar-inner .search-box { padding: 11px 18px; }
 
-  .page-header .form-control,
-  .page-header .btn-primary {
-    width: 100%;
-  }
-
-  .sidebar {
-    margin-bottom: 24px;
+  .toast-custom {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: unset;
   }
 }

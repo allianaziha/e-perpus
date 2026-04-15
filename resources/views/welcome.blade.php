@@ -42,67 +42,79 @@
 
     <!-- Services Section -->
     <!-- Features / Layanan -->
-    <section id="services" class="services section light-background">
-      <div class="container section-title text-center">
-        <h2>Fitur Utama</h2>
-        <p>Fitur unggulan dalam sistem e-Perpus</p>
-      </div>
+  <section id="services" class="services section light-background">
 
-      <div class="container">
-        <div class="row g-4">
+  <div class="container section-title text-center">
+    <h2>Layanan Perpustakaan Digital Kami</h2>
+    <p>Fitur unggulan yang memudahkan pengelolaan dan peminjaman buku</p>
+  </div>
 
-          <div class="col-lg-4">
-            <div class="service-card text-center p-4">
-              <i class="bi bi-book fs-1"></i>
-              <h3>Peminjaman Buku</h3>
-              <p>Ajukan peminjaman buku secara online dengan mudah.</p>
-            </div>
+  <div class="container">
+    <div class="row g-4">
+
+      <div class="col-lg-4 col-md-6">
+        <div class="service-card custom-hover text-center p-4">
+          <div class="icon mb-3">
+            <i class="bi bi-book"></i>
           </div>
-
-          <div class="col-lg-4">
-            <div class="service-card text-center p-4">
-              <i class="bi bi-arrow-repeat fs-1"></i>
-              <h3>Perpanjangan</h3>
-              <p>Perpanjang masa pinjam tanpa harus datang ke perpustakaan.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="service-card text-center p-4">
-              <i class="bi bi-cash-stack fs-1"></i>
-              <h3>Denda Otomatis</h3>
-              <p>Denda dihitung otomatis jika terlambat.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="service-card text-center p-4">
-              <i class="bi bi-person-check fs-1"></i>
-              <h3>ACC Admin</h3>
-              <p>Peminjaman hanya aktif setelah disetujui admin.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="service-card text-center p-4">
-              <i class="bi bi-clock-history fs-1"></i>
-              <h3>Riwayat</h3>
-              <p>Lihat semua riwayat peminjaman dan pengembalian.</p>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="service-card text-center p-4">
-              <i class="bi bi-file-earmark-text fs-1"></i>
-              <h3>Laporan</h3>
-              <p>Cetak laporan peminjaman dalam PDF/Excel.</p>
-            </div>
-          </div>
-
+          <h3>Koleksi Buku Digital</h3>
+          <p>Menyediakan berbagai koleksi buku digital yang dapat diakses kapan saja secara online.</p>
         </div>
       </div>
-    </section>
 
+      <div class="col-lg-4 col-md-6">
+        <div class="service-card custom-hover text-center p-4">
+          <div class="icon mb-3">
+            <i class="bi bi-search"></i>
+          </div>
+          <h3>Pencarian Buku</h3>
+          <p>Memudahkan pengguna menemukan buku berdasarkan judul, kategori, maupun penulis.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="service-card custom-hover text-center p-4">
+          <div class="icon mb-3">
+            <i class="bi bi-cart-check"></i>
+          </div>
+          <h3>Peminjaman Online</h3>
+          <p>Proses peminjaman buku dilakukan secara online tanpa harus datang langsung.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="service-card custom-hover text-center p-4">
+          <div class="icon mb-3">
+            <i class="bi bi-arrow-repeat"></i>
+          </div>
+          <h3>Perpanjangan Peminjaman</h3>
+          <p>Pengguna dapat memperpanjang masa pinjam dengan mudah melalui sistem.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="service-card custom-hover text-center p-4">
+          <div class="icon mb-3">
+            <i class="bi bi-cash-stack"></i>
+          </div>
+          <h3>Denda Otomatis</h3>
+          <p>Sistem menghitung denda secara otomatis jika terjadi keterlambatan pengembalian.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-6">
+        <div class="service-card custom-hover text-center p-4">
+          <div class="icon mb-3">
+            <i class="bi bi-clock-history"></i>
+          </div>
+          <h3>Riwayat Peminjaman</h3>
+          <p>Menampilkan riwayat peminjaman dan pengembalian buku secara lengkap.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
 <!-- FAQ (GANTI PRICING) -->
     <section id="pricing" class="pricing section light-background">
       <div class="container section-title text-center">

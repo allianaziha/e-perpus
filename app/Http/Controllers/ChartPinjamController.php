@@ -7,13 +7,9 @@ use App\Models\ChartPinjam;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use Auth;
-use Alerts;
 
 class ChartPinjamController extends Controller
 {
-    /**
-     * Halaman keranjang peminjaman
-     */
     public function index()
     {
         $chartPinjam = ChartPinjam::with('buku')
@@ -23,16 +19,15 @@ class ChartPinjamController extends Controller
         return view('chart', compact('chartPinjam'));
     }
 
-    /**
-     * Tambah buku ke keranjang peminjaman
-     */
     public function add(Request $request, $bukuId)
     {
         if (!Auth::check()) {
             if ($request->expectsJson()) {
-                return response()->json(['success' => false, 'message' => 'Silakan login terlebih dahulu.'], 401);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Silakan login terlebih dahulu.'
+                ], 401);
             }
-            toast('Silakan login terlebih dahulu.', 'error');
             return redirect('/login');
         }
 
@@ -43,10 +38,10 @@ class ChartPinjamController extends Controller
         $buku = Buku::findOrFail($bukuId);
 
         if ($buku->stok < $request->qty) {
-            if ($request->expectsJson()) {
-                return response()->json(['success' => false, 'message' => 'Stok buku tidak mencukupi.'], 422);
-            }
-            return back()->with('error', 'Stok buku tidak mencukupi.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Stok buku tidak mencukupi.'
+            ], 422);
         }
 
         $chart = ChartPinjam::where('user_id', Auth::id())
@@ -63,18 +58,16 @@ class ChartPinjamController extends Controller
             ]);
         }
 
-        if ($request->expectsJson()) {
-            $cartCount = ChartPinjam::where('user_id', Auth::id())->sum('qty');
-            return response()->json(['success' => true, 'message' => 'Buku berhasil ditambahkan ke keranjang peminjaman.', 'cart_count' => $cartCount]);
-        }
+        // ✅ INI YANG PENTING
+        $cartCount = ChartPinjam::where('user_id', Auth::id())->sum('qty');
 
-        toast('Buku berhasil ditambahkan ke keranjang peminjaman.', 'success');
-        return redirect()->route('chart.pinjam.index');
+        return response()->json([
+            'success' => true,
+            'message' => 'Buku berhasil ditambahkan ke keranjang.',
+            'count'   => $cartCount
+        ]);
     }
 
-    /**
-     * Update jumlah buku
-     */
     public function update(Request $request, $id)
     {
         $chartItem = ChartPinjam::with('buku')
@@ -86,17 +79,11 @@ class ChartPinjamController extends Controller
             'qty' => 'required|integer|min:1|max:' . $chartItem->buku->stok,
         ]);
 
-        $chartItem->update([
-            'qty' => $request->qty,
-        ]);
+        $chartItem->update(['qty' => $request->qty]);
 
-        toast('Jumlah buku berhasil diperbarui.', 'success');
         return redirect()->route('chart.pinjam.index');
     }
 
-    /**
-     * Hapus buku dari keranjang
-     */
     public function remove($id)
     {
         $chart = ChartPinjam::where('id', $id)
@@ -105,13 +92,52 @@ class ChartPinjamController extends Controller
 
         $chart->delete();
 
-        toast('Buku berhasil dihapus dari keranjang.', 'success');
+        // ✅ HITUNG ULANG
+        $cartCount = ChartPinjam::where('user_id', auth()->id())->sum('qty');
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Buku berhasil dihapus dari keranjang.',
+                'count'   => $cartCount, // ✅ FIX
+            ]);
+        }
+
         return back();
     }
 
-    /**
-     * Proses pinjam buku
-     */
+    public function mini()
+    {
+        $chartPinjam = ChartPinjam::with('buku')
+            ->where('user_id', auth()->id())
+            ->get();
+
+        $totalBuku = $chartPinjam->sum('qty');
+
+        return view('layouts.components-frontend.minichart-body', compact('chartPinjam', 'totalBuku'))->render();
+    }
+
+    public function removeSelected(Request $request)
+    {
+        $request->validate([
+            'selected_items'   => 'required|array',
+            'selected_items.*' => 'integer|exists:chart_pinjam,id',
+        ]);
+
+        ChartPinjam::where('user_id', auth()->id())
+            ->whereIn('id', $request->selected_items)
+            ->delete();
+
+        // ✅ HITUNG ULANG
+        $cartCount = ChartPinjam::where('user_id', auth()->id())->sum('qty');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item terpilih berhasil dihapus dari keranjang.',
+            'count'   => $cartCount, // ✅ FIX
+        ]);
+    }
+
     public function checkout()
     {
         $chartPinjam = ChartPinjam::with('buku')
@@ -119,7 +145,6 @@ class ChartPinjamController extends Controller
             ->get();
 
         if ($chartPinjam->isEmpty()) {
-            toast('Keranjang peminjaman kosong.', 'warning');
             return redirect()->route('chart.pinjam.index');
         }
 
@@ -128,9 +153,8 @@ class ChartPinjamController extends Controller
             $buku->stok -= $item->qty;
             $buku->save();
 
-            // Buat record peminjaman untuk setiap item
             Peminjaman::create([
-                'kode_peminjaman' => 'PJM-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6)),  // ← tambahan ini
+                'kode_peminjaman' => 'PJM-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6)),
                 'buku_id'         => $item->buku_id,
                 'user_id'         => auth()->id(),
                 'jumlah_buku'     => $item->qty,
@@ -140,10 +164,8 @@ class ChartPinjamController extends Controller
             ]);
         }
 
-        // kosongkan keranjang
         ChartPinjam::where('user_id', auth()->id())->delete();
 
-        toast('Peminjaman berhasil diproses. Permintaan telah dikirim ke admin.', 'success');
         return redirect()->route('buku.index');
     }
 }
